@@ -3,3 +3,6 @@
 /*.csproj
 /*.sln
 **.suo
+/Assets/Packages
+/Assets/Packages.meta
+
