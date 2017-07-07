@@ -25,19 +25,8 @@ namespace ResourceFormat {
             set { m_showUnformatObject = value; }
         }
 
-        public void RefreshBaseData() {
+        protected override void _RefreshList(List<string> list) {
             m_modelInfo = new List<ModelInfo>();
-            List<string> list = PathConfig.GetAssetPathList(RFConfig.ResourceRootPath);
-            _RefreshList(list);
-        }
-
-        public void RefreshDataByRootPath(string path) {
-            List<string> list = new List<string>();
-            PathConfig.ScanDirectoryFile(path, true, list);
-            _RefreshList(list);
-        }
-
-        private void _RefreshList(List<string> list) {
             for (int i = 0; i < list.Count; ++i) {
                 string path = PathConfig.FormatAssetPath(list[i]);
                 string name = System.IO.Path.GetFileName(path);

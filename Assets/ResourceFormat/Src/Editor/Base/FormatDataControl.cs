@@ -86,10 +86,24 @@ namespace ResourceFormat {
             m_index = -1;
             m_editorData = new T();
         }
+        public virtual void RefreshBaseData() {
+            List<string> list = PathConfig.GetAssetPathList(RFConfig.ResourceRootPath);
+            _RefreshList(list);
+        }
+
+        public virtual void RefreshDataByRootPath(string path) {
+            List<string> list = PathConfig.GetAssetPathList(RFConfig.ResourceRootPath + "/" + path);
+            _RefreshList(list);
+        }
+
+        protected virtual void _RefreshList(List<string> list) {
+        }
+
         public virtual void OnDataSelectedIndex() {
             if (m_index == -1) return;
             OnDataSelected(m_dataList[m_index], m_index);
         }
+
         public virtual void RefreshDataWithSelect() {
             for (int i = 0; i < m_dataList.Count; ++i) {
                 m_dataList[i].ClearObject();

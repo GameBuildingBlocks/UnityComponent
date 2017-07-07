@@ -25,14 +25,14 @@ namespace ResourceFormat {
             set { m_showUnformatObject = value; }
         }
 
-        public void RefreshBaseData() {
+        protected override void _RefreshList(List<string> list) {
             m_aniInfo = new List<AnimationInfo>();
-            List<string> list = PathConfig.GetAssetPathList(RFConfig.ResourceRootPath);
             for (int i = 0; i < list.Count; ++i) {
                 string path = PathConfig.FormatAssetPath(list[i]);
                 string name = System.IO.Path.GetFileName(path);
                 EditorUtility.DisplayProgressBar("获取动作数据", name, (i * 1.0f) / list.Count);
-                if (!PathConfig.IsAnimation(path)) continue;
+                if (!PathConfig.IsAnimation(path))
+                    continue;
                 AnimationInfo aniInfo = AnimationInfo.CreateAnimationInfo(path);
                 if (aniInfo != null) {
                     m_aniInfo.Add(aniInfo);
@@ -41,6 +41,7 @@ namespace ResourceFormat {
             EditorUtility.ClearProgressBar();
             RefreshDataWithSelect();
         }
+
         public override void RefreshDataWithSelect() {
             base.RefreshDataWithSelect();
 

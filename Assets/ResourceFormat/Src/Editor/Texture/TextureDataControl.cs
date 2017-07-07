@@ -19,9 +19,8 @@ namespace ResourceFormat {
             set { m_showUnformatObject = value; }
         }
 
-        public void RefreshBaseData() {
+        protected override void _RefreshList(List<string> list) {
             m_texInfoList = new List<TextureInfo>();
-            List<string> list = PathConfig.GetAssetPathList(RFConfig.ResourceRootPath);
             for (int i = 0; i < list.Count; ++i) {
                 string path = PathConfig.FormatAssetPath(list[i]);
                 string name = System.IO.Path.GetFileName(path);

@@ -9,6 +9,9 @@ namespace ResourceFormat {
                 path = path.Substring(index + RFConfig.ResourceRootPath.Length);
             }
             string packagePath = PathConfig.NormalizePathSplash(path);
+            if (packagePath.StartsWith("/")) {
+                packagePath = packagePath.Substring(1);
+            }
             string formatPath = PathConfig.NormalizePathSplash(data.RootPath);
             if (!string.IsNullOrEmpty(formatPath) &&
                 !packagePath.StartsWith(formatPath, System.StringComparison.OrdinalIgnoreCase))

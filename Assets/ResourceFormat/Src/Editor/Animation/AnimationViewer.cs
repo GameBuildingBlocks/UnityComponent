@@ -90,11 +90,17 @@ namespace ResourceFormat {
                     m_control.ModifDataPriority(false);
                 }
 
-                if (GUILayout.Button("Apply All Format", TableStyles.ToolbarButton, GUILayout.MaxWidth(160))) {
+                if (GUILayout.Button("Apply Select Format", TableStyles.ToolbarButton, GUILayout.MaxWidth(160))) {
                     AnimationFormater.ApplyFormatToObject(m_control.SelectData);
                 }
 
-                if (GUILayout.Button("Refresh Texture Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140))) {
+                if (GUILayout.Button("Refresh Select Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140))) {
+                    if (m_control.Index != -1) {
+                        m_control.RefreshDataByRootPath(m_control.SelectData.RootPath);
+                    }
+                }
+
+                if (GUILayout.Button("Refresh All Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140))) {
                     m_control.RefreshBaseData();
                 }
 
@@ -105,11 +111,11 @@ namespace ResourceFormat {
             int startY = toolbarHeight + border;
             int height = (int)(r.height - startY - border * 2);
             if (m_dataTable != null) {
-                m_dataTable.Draw(new Rect(border, startY, r.width - border, (int)(height * split - border * 1.5f)));
+                m_dataTable.Draw(new Rect(border, startY, r.width - 2 * border, (int)(height * split - border * 1.5f)));
             }
 
             if (m_showTable != null) {
-                m_showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - border, (int)(height * (1.0f - split) - border * 1.5f)));
+                m_showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - 2 * border, (int)(height * (1.0f - split) - border * 1.5f)));
             }
 
             GUILayout.EndVertical();
