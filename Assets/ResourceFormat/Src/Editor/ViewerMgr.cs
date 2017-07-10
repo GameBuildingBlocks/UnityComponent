@@ -45,7 +45,7 @@ namespace ResourceFormat {
 
             BaseViewer curViewer = GetCurrentMode();
             if (curViewer != null) {
-                curViewer.OnLeave();
+                curViewer.OnEnter();
             }
 
             EditorPrefs.SetInt(TableConst.CurrentMode, (int)(m_currentMode));

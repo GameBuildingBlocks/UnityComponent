@@ -25,7 +25,7 @@ namespace ResourceFormat {
             TotalCount = TotalCount + 1;
             TotalMemuse = TotalMemuse + textureInfo.MemSize;
             m_objects.Add(textureInfo);
-            if (m_initUnFormatList && IsFormatAnimation(textureInfo)) {
+            if (m_initUnFormatList && !IsFormatAnimation(textureInfo)) {
                 m_unFortmatObjects.Add(textureInfo);
             }
         }
