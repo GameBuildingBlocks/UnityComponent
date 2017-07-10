@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ResourceFormat {
     public class ImportData {
-        public string RootPath   = "ArtWorks";
+        public string RootPath   = "";
         public string FileNameMatch     = "*.*";
         public int  Index = -1;
         public int  TotalCount = 0;

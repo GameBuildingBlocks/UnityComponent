@@ -5,6 +5,12 @@ using UnityEditor;
 
 namespace ResourceFormat {
     public static class TextureFormater {
+
+        public static void FormatTexture(string path, TextureImportData data)
+        {
+            //AssetBundleManifest
+        }
+
         public static void ApplyFormatToObject(TextureImportData data) {
             List<object> unFortmatObject = data.GetObjects(true);
 
