@@ -13,18 +13,17 @@ namespace BundleManager
         StreamingAssets,
         PersistentDataPath,
 
-        UNKnown,
+        Building,
     }
 
     public class BundleState
     {
-        public const int INVALID_BUNDLE_ID = -1;
-        // detail see BundleTypeTool
-        public int bundleID = INVALID_BUNDLE_ID;
+        public string bundleID = string.Empty;
         public uint crc = 0;
+        public uint compressCrc = 0;
         public int version = -1;
         public long size = -1;
         public BundleLoadState loadState = BundleLoadState.UnLoadOnUnloadAsset;
-        public BundleStorePos storePos = BundleStorePos.UNKnown;
+        public BundleStorePos storePos = BundleStorePos.Building;
     }
 }

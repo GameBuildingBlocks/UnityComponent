@@ -10,5 +10,7 @@ public static class EditorConst {
 
     public static string PlatformAndroid = "Android";
     public static string PlatformIos = "iPhone";
+    public static string PlatformStandalones = "Standalones";
+
     public static string EDITOR_ANICLIP_NAME = "__preview__Take 001";
 }

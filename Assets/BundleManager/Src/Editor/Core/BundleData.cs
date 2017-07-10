@@ -8,6 +8,7 @@ namespace BundleManager
         public string parent = string.Empty;
         public BundleType type = BundleType.None;
         public BundleLoadState loadState = BundleLoadState.UnLoadOnUnloadAsset;
+        public long size = 0;
         public List<string> includs = new List<string>();
         public List<string> children = new List<string>();
     }

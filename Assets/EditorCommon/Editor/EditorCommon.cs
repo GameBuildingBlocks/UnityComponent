@@ -133,8 +133,10 @@ public static class EditorCommon {
         int size = 0;
         Object[] objs = AssetDatabase.LoadAllAssetsAtPath(path);
         for (int i = 0; i < objs.Length; ++i) {
-            if ((objs[i] is AnimationClip) && objs[i].name != "__preview__Take 001") {
+            if ((objs[i] is AnimationClip) && objs[i].name != EditorConst.EDITOR_ANICLIP_NAME) {
+#pragma warning disable 0618
                 size += UnityEngine.Profiling.Profiler.GetRuntimeMemorySize(objs[i]);
+#pragma warning restore 0618
             }
             if ((!(objs[i] is GameObject)) && (!(objs[i] is Component))) {
                 Resources.UnloadAsset(objs[i]);

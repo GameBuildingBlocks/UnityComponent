@@ -12,13 +12,12 @@ namespace BundleManager
         }
         public int GetBundleIdByPathHash(ulong hashID)
         {
-            return BundleState.INVALID_BUNDLE_ID;
+            return -1;
         }
 
         public BundleState GetBundleState(int bundleID)
         {
             return new BundleState();
-            //return null;
         }
 
         public bool GetBundleDepencies(int bundleID, List<int> retDepenList)
@@ -102,7 +101,7 @@ namespace BundleManager
             return true;
         }
 
-        Dictionary<int, BundleState> m_bundleNameToState = new Dictionary<int, BundleState>();
+        Dictionary<string, BundleState> m_bundleNameToState = new Dictionary<string, BundleState>();
         Dictionary<string, string> m_pathToBundleName = new Dictionary<string, string>();
         Dictionary<string, List<string>> m_bundleDependDict = new Dictionary<string, List<string>>();
     }
