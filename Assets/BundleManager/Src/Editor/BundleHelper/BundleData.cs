@@ -9,19 +9,8 @@ namespace BundleManager
         public BundleType type = BundleType.None;
         public BundleLoadState loadState = BundleLoadState.UnLoadOnUnloadAsset;
         public long size = 0;
+        // includs contain asset path or some buid-in resource with name.
         public List<string> includs = new List<string>();
         public List<string> children = new List<string>();
-    }
-
-    public class BundleImportData
-    {
-        public string rootPath = string.Empty;
-        public string regexName = string.Empty;
-        public BundleType type = BundleType.None;
-        public BundleLoadState loadState = BundleLoadState.UnLoadOnUnloadAsset;
-        public int limitCount = -1;
-        public int limitKBSize = -1;
-        public int index = -1;
-        public bool pushDependice = false;
     }
 }

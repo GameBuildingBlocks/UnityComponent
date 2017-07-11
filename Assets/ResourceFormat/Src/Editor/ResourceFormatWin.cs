@@ -22,12 +22,5 @@ namespace ResourceFormat {
                 m_modeMgr.OnGUI(position);
             }
         }
-
-        public ViewerMgr GetFormatModeManager() {
-            if (m_modeMgr == null) {
-                m_modeMgr = new ViewerMgr(this);
-            }
-            return m_modeMgr;
-        }
     }
 }

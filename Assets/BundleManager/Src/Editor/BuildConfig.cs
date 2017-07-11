@@ -3,13 +3,17 @@ using UnityEditor;
 
 namespace BundleManager
 {
-    public class BuildConfig
+    public static class BuildConfig
     {
         public static BuildAssetBundleOptions CompressAssetBundleOptions = BuildAssetBundleOptions.ChunkBasedCompression;
         public static BuildAssetBundleOptions DeterministicBundleOptions = BuildAssetBundleOptions.DeterministicAssetBundle;
         public static BuildOptions CompressSceneOptions = BuildOptions.CompressWithLz4;
         public static string BundleSuffix = ".bytes";
         public static string InterpretedRootPath = "Bundle/";
+        public static string ResourceRootPath = "Assets";
+        public static string BundleDataPath = InterpretedRootPath + "BundleData.txt";
+        public static string BundleStatePath = InterpretedRootPath + "BundleStatePath.txt";
+        public static string BundleImportDataPath = InterpretedRootPath + "BundleImportData.txt";
 
         public static BuildAssetBundleOptions CurrentBuildAssetOpts
         {
@@ -53,5 +57,19 @@ namespace BundleManager
 #endif
             }
         }
+    }
+
+    public static class BundleName
+    {
+        public static string BN_SHADER = "Shader";
+        public static string BN_SCRIPT = "Script";
+    }
+
+    public static class TableStyles
+    {
+        public static GUIStyle Toolbar = "Toolbar";
+        public static GUIStyle ToolbarButton = "ToolbarButton";
+
+        public static GUIStyle TextField = "TextField";
     }
 }

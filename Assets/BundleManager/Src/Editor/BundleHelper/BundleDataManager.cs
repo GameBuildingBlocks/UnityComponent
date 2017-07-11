@@ -5,9 +5,23 @@ using System.Collections.Generic;
 
 namespace BundleManager 
 {
-    public class BundleDataManager
+    public static class BundleDataManager
     {
-        public bool CreateNewBundle(string name, string parent, BundleType type, BundleLoadState loadState)
+        public static  BundleData GetBundleData(string name)
+        {
+            BundleData ret = null;
+            m_dataDict.TryGetValue(name, out ret);
+            return ret;
+        }
+
+        static public BundleState GetBundleState(string name)
+        {
+            BundleState ret = null;
+            m_stateDict.TryGetValue(name, out ret);
+            return ret;
+        }
+
+        public static bool CreateNewBundle(string name, string parent, BundleType type, BundleLoadState loadState)
         {
             if (m_dataDict.ContainsKey(name))
             {
@@ -44,7 +58,7 @@ namespace BundleManager
 
             return true;
         }
-        public bool CanBundleParentTo(string child, string newParent)
+        public static bool CanBundleParentTo(string child, string newParent)
         {
             if (child == newParent)
             {
@@ -71,7 +85,7 @@ namespace BundleManager
 
             return true;
         }
-        public bool SetParent(string child, string newParent)
+        public static bool SetParent(string child, string newParent)
         {
             if (!CanBundleParentTo(child, newParent))
             {
@@ -94,7 +108,7 @@ namespace BundleManager
 
             return true;
         }
-        public bool CanAddPathToBundle(string path, string bundleName)
+        public static bool CanAddPathToBundle(string path, string bundleName)
         {
             if (!File.Exists(path))
             {
@@ -109,7 +123,7 @@ namespace BundleManager
 
             return true;
         }
-        public bool AddPathToBundle(string path, string bundleName, long size)
+        public static bool AddPathToBundle(string path, string bundleName, long size)
         {
             if (!CanAddPathToBundle(path, bundleName))
             {
@@ -125,7 +139,95 @@ namespace BundleManager
 
             return true;
         }
-        private void Init()
+
+        public static void RemovePathFromBundle(string path, string bundleName)
+        {
+            BundleData bundle = GetBundleData(bundleName);
+            if (bundle == null)
+            {
+                return;
+            }
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            //string path = AssetDatabase.GUIDToAssetPath(guid);
+
+            if (m_guidToBundle.ContainsKey(guid))
+            {
+                m_guidToBundle.Remove(path);
+            }
+
+            for (int i = 0; i < bundle.includs.Count; ++i)
+            {
+                string nGuid = AssetDatabase.AssetPathToGUID(bundle.includs[i]);
+                if (nGuid == guid)
+                {
+                    bundle.includs.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        /**
+         * Remove asset from bundle's include list by guid.
+         */
+        public static void RemoveAssetFromBundle(string guid, string bundleName)
+        {
+            
+        }
+        public static string GetIndexBundleName(int index)
+        {
+            return "Index_" + index.ToString();
+        }
+        public static string GenBundleNameByType(BundleType type)
+        {
+            if (!m_typeCount.ContainsKey(type))
+            {
+                m_typeCount.Add(type, 1);
+            }
+            else
+            {
+                ++m_typeCount[type];
+            }
+            return BundleTypeTool.GetBundleID(type, m_typeCount[type] - 1).ToString();
+        }
+        public static string GetPathBundleName(string assetPath)
+        {
+            string guid = AssetDatabase.AssetPathToGUID(assetPath);
+            string ret = string.Empty;
+            if (m_guidToBundle.TryGetValue(guid, out ret))
+            {
+                return ret;
+            }
+            return string.Empty;
+        }
+
+        public static bool CheckPathInBundle(string path)
+        {
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            return m_guidToBundle.ContainsKey(guid);
+        }
+
+        public static bool IsBundleFull(BundleData bundle, int maxCount, int memSize)
+        {
+            if (memSize > 0 && bundle.size > memSize)
+                return true;
+            if (maxCount > 0 && bundle.includs.Count >= maxCount)
+                return true;
+            return false;
+        }
+        public static bool IsNameDuplicatedAsset(BundleData bundle, string newAsset)
+        {
+            string newName = Path.GetFileNameWithoutExtension(newAsset).ToUpperInvariant();
+            foreach (string path in bundle.includs)
+            {
+                string file = Path.GetFileNameWithoutExtension(path).ToUpperInvariant();
+                if (file == newName)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static void Init()
         {
             BMDataAccessor.Refresh();
             Clear();
@@ -177,7 +279,7 @@ namespace BundleManager
                 }
             }
         }
-        private void Clear()
+        private static void Clear()
         {
             m_typeCount.Clear();
             m_dataDict.Clear();

@@ -60,7 +60,7 @@ namespace BundleManager
 
             return succeed;
         }
-        private static void FilterObjectByType(UnityEngine.Object[] assetsAtPath, List<UnityEngine.Object> ret, BundleType bundleType, string assetPath)
+        public static void FilterObjectByType(UnityEngine.Object[] assetsAtPath, List<UnityEngine.Object> ret, BundleType bundleType, string assetPath)
         {
             switch (bundleType)
             {
@@ -70,7 +70,7 @@ namespace BundleManager
                     if (obj == null)
                         continue;
                     Type type = obj.GetType();
-                    if (type == typeof(AnimationClip) && obj.name != "__preview__Take 001")
+                    if (type == typeof(AnimationClip) && obj.name != EditorConst.EDITOR_ANICLIP_NAME)
                     {
                         ret.Add(obj);
                     }
