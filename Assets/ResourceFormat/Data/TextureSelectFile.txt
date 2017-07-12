@@ -1,0 +1,25 @@
+[
+    
+    {
+        "TextureTypeIndex" : 0,        
+        "TextureShapeIndex" : 0,        
+        "AndroidFormatIndex" : 2,        
+        "IosFormatIndex" : 1,        
+        "AlphaMode" : 0,        
+        "TexType" : 0,        
+        "ShapeType" : 1,        
+        "AndroidFormat" : 45,        
+        "IosFormat" : 32,        
+        "ReadWriteEnable" : false,        
+        "MipmapEnable" : false,        
+        "MaxSize" : -1,        
+        "ForceSet" : false,        
+        "AlwaysMatch" : false,        
+        "RootPath" : "",        
+        "FileNameMatch" : "*.*",        
+        "Index" : 0,        
+        "TotalCount" : 0,        
+        "TotalMemuse" : 0,        
+        "PreBuild" : true
+    }
+]
