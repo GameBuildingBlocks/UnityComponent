@@ -27,6 +27,9 @@ namespace ResourceFormat {
                 if (tImporter.textureType != data.TexType) {
                     tImporter.textureType = data.TexType;
                 }
+                if (tImporter.textureShape != data.ShapeType) {
+                    tImporter.textureShape = data.ShapeType;
+                }
                 tImporter.isReadable = data.ReadWriteEnable;
                 tImporter.mipmapEnabled = data.MipmapEnable;
 

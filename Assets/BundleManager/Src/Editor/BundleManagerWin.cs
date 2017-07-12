@@ -27,7 +27,7 @@ namespace BundleManager
         {
             if (m_bundleDataViewer != null)
             {
-                Rect viewRect = new Rect(0, 10, position.width, position.height - 10);
+                //Rect viewRect = new Rect(0, 10, position.width, position.height - 10);
                 m_bundleDataViewer.Draw(position);
             }
         }

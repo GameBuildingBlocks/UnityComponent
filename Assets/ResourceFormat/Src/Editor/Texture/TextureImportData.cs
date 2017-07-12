@@ -28,10 +28,17 @@ namespace ResourceFormat {
         public bool ReadWriteEnable = false;
         public bool MipmapEnable = false;
         public int MaxSize = -1;
+        public bool ForceSet = false;
+        public bool AlwaysMatch = false;
 
         public override bool IsMatch(string path) {
+            if (AlwaysMatch) {
+                return true;
+            }
             bool pathMatch = PathConfig.IsTexture(path) && base.IsMatch(path);
-            if (!pathMatch) return false;
+            if (!pathMatch || ForceSet) {
+                return pathMatch;
+            }
             TextureImporter texureImporter = AssetImporter.GetAtPath(path) as TextureImporter;
 #pragma warning disable 0618
             if (TexType == TextureImporterType.Cubemap) {
@@ -55,6 +62,7 @@ namespace ResourceFormat {
             ReadWriteEnable = tData.ReadWriteEnable;
             MipmapEnable = tData.MipmapEnable;
             MaxSize = tData.MaxSize;
+            AlwaysMatch = tData.AlwaysMatch;
         }
         public override void ClearObject() {
             m_initUnFormatList = false;
@@ -99,6 +107,7 @@ namespace ResourceFormat {
             if (tImporter.isReadable != ReadWriteEnable) return false;
             if (tImporter.mipmapEnabled != MipmapEnable) return false;
             if (tImporter.textureType != TexType) return false;
+            if (tImporter.textureShape != ShapeType) return false;
             TextureImporterPlatformSettings settingAndroid = tImporter.GetPlatformTextureSettings(EditorConst.PlatformAndroid);
             if (!settingAndroid.overridden || settingAndroid.format != GetFormatByAlphaMode(AndroidFormat, tImporter)) return false;
             TextureImporterPlatformSettings settingIos = tImporter.GetPlatformTextureSettings(EditorConst.PlatformIos);

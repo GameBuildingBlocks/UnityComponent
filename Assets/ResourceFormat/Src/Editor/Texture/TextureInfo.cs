@@ -22,6 +22,7 @@ namespace ResourceFormat {
         public TextureImporterType ImportType;
         public TextureWrapMode WrapMode;
         public FilterMode FilterMode;
+        public TextureImporterShape ImportShape;
 
         public static TextureInfo CreateTextureInfo(string assetPath) {
             TextureInfo tInfo = null;
@@ -35,6 +36,7 @@ namespace ResourceFormat {
 
             tInfo.Path = tImport.assetPath;
             tInfo.ImportType = tImport.textureType;
+            tInfo.ImportShape = tImport.textureShape;
             tInfo.ReadWriteEnable = tImport.isReadable;
             tInfo.MipmapEnable = tImport.mipmapEnabled;
             tInfo.WrapMode = tImport.wrapMode;

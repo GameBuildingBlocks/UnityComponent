@@ -25,6 +25,7 @@ namespace ResourceFormat {
             TotalCount = 0;
             TotalMemuse = 0;
         }
+
         public virtual List<object> GetObjects() {
             return m_objects;
         }
