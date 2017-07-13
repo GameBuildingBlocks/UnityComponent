@@ -20,6 +20,7 @@ namespace BundleManager
                 return ret;
             }
 
+            BundleImportData assetImportData = BundleDataControl.Instance.GetPathImportData(assetPath);
             UnityEngine.Object[] assets = null;
 
             switch (type)
@@ -42,7 +43,7 @@ namespace BundleManager
                     if (EditorPath.IsTexture(deps[i]))
                     {
                         BundleImportData data = BundleDataControl.Instance.GetPathImportData(deps[i]);
-                        if (data == null || data.SkipData)
+                        if (assetImportData == null || data == null || assetImportData.Index < data.Index || data.SkipData)
                         {
                             ret += EditorTool.CalculateTextureSizeBytes(deps[i]);
                         }
@@ -77,6 +78,7 @@ namespace BundleManager
             m_pathFileSize.Add(assetPath, ret);
             return ret;
         }
+
         public static void Clear()
         {
             m_pathFileSize.Clear();

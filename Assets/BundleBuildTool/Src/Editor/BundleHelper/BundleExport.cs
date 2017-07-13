@@ -14,11 +14,10 @@ namespace BundleManager
             EditorTool.CreateDirectory(BuildConfig.InterpretedOutputPath);
 
             ExportBundleDictToOutput();
-            ExportBundleStateToOutput();
 
-            string[] list = { BuildConfig.BundleDictOutputPath, BuildConfig.BundleStateOutputPath };
+            string[] list = { BuildConfig.BundleMainfestOutputPath};
             uint crc = 0;
-            bool success = BundleBuildHelper.BuildAssetBundle(list, BuildConfig.BundleMainfestOutputPath, out crc, BundleType.TextAsset);
+            bool success = BundleBuildHelper.BuildAssetBundle(list, BuildConfig.MainfestOutputPath, out crc, BundleType.TextAsset);
             if (!success)
             {
                 Debug.LogErrorFormat("[BundleExport] BuildAssetBundle {0} Failed.", BuildConfig.BundleMainfestOutputPath);
@@ -30,7 +29,7 @@ namespace BundleManager
             EditorTool.CreateDirectory(BuildConfig.InterpretedOutputPath);
 
             BundleDataControl dataControl = BundleDataControl.Instance;
-            BundleNexus bundleNexus = new BundleNexus();
+            BundleMainfest bundleMainfest = new BundleMainfest();
             BundleData[] bundleData = BundleDataAccessor.Datas.ToArray();
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -59,7 +58,7 @@ namespace BundleManager
                     }
 
                     string bundlePath = path; // format path to load path!!!
-                    bundleNexus.AddPathToBundle(bundlePath, bundleData[i].name);
+                    bundleMainfest.AddPathToBundle(bundlePath, bundleData[i].name);
                 }
             }
 
@@ -82,21 +81,17 @@ namespace BundleManager
                         if (childBuildState.loadState == BundleLoadState.Preload || childBuildState.size == -1)
                             continue;
 
-                        bundleNexus.AddBundleRely(bundleData[i].name, bundleName);
+                        bundleMainfest.AddBundleDepend(bundleData[i].name, bundleName);
                     }
                 }
             }
 
-            bundleNexus.SaveBytes(BuildConfig.BundleDictOutputPath);
-
-            AssetDatabase.ImportAsset(BuildConfig.BundleDictOutputPath, ImportAssetOptions.ForceSynchronousImport);
-        }
-
-        public static void ExportBundleStateToOutput()
-        {
-            EditorTool.CreateDirectory(BuildConfig.InterpretedOutputPath);
             List<BundleState> stateList = new List<BundleState>(BundleDataAccessor.States);
-            EditorTool.SaveJsonData<List<BundleState>>(stateList, BuildConfig.BundleStateOutputPath);
+            bundleMainfest.AddBundleState(stateList);
+
+            bundleMainfest.SaveBytes(BuildConfig.BundleMainfestOutputPath);
+
+            AssetDatabase.ImportAsset(BuildConfig.BundleMainfestOutputPath, ImportAssetOptions.ForceSynchronousImport);
         }
     }
 }

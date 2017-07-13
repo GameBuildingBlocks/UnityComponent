@@ -68,7 +68,7 @@ namespace BundleManager
                     return;
                 }
                 MaterialProperty[] proTes = MaterialEditor.GetMaterialProperties(new Object[] {mat});
-                for (int i = 0; i < proTes.Length; ++i)
+                for (int i = 0; proTes != null && i < proTes.Length; ++i)
                 {
                     if (proTes[i].type == MaterialProperty.PropType.Texture)
                     {
@@ -78,12 +78,13 @@ namespace BundleManager
                         {
                             dict.Add(path, path);
                         }
+                        Resources.UnloadAsset(tex);
                     }
                 }
                 for (int i = 0; i < dep.Length; ++i)
                 {
                     // assume material only depencies Texture & Shader
-                    if (dep[i].EndsWith(".shader") && !dict.ContainsKey(dep[i]))
+                    if (EditorCommon.EditorPath.IsShader(dep[i]) && !dict.ContainsKey(dep[i]))
                     {
                         dict.Add(dep[i], dep[i]);
                     }

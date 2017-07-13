@@ -59,25 +59,19 @@ namespace BundleManager
             }
         }
 
+        public static string MainfestOutputPath
+        {
+            get
+            {
+                return GetBuildOutputPath("Mainfest");
+            }
+        }
+
         public static string BundleMainfestOutputPath
         {
             get
             {
-                return GetBuildOutputPath("BundleMainfest");
-            }
-        }
-        public static string BundleStateOutputPath
-        {
-            get
-            {
-                return GetBuildOutputPath("BundleState", ".bytes");
-            }
-        }
-        public static string BundleDictOutputPath
-        {
-            get
-            {
-                return GetBuildOutputPath("BundleDict", ".bytes");
+                return GetBuildOutputPath("BundleMainfest", ".bytes");
             }
         }
         public static string GetBuildOutputPath(string bundleName, string suffix = "")
