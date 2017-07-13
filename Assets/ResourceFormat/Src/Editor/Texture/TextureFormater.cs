@@ -2,38 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using EditorCommon;
 
-namespace ResourceFormat {
-    public static class TextureFormater {
-
-        public static void FormatTexture(string path, TextureImportData data)
+namespace ResourceFormat
+{
+    public static class TextureFormater
+    {
+        public static void ApplyFormatToObject(TextureImportData data)
         {
-            //AssetBundleManifest
-        }
-
-        public static void ApplyFormatToObject(TextureImportData data) {
             List<object> unFortmatObject = data.GetObjects(true);
 
-            for (int i = 0; i < unFortmatObject.Count; ++i) {
+            for (int i = 0; i < unFortmatObject.Count; ++i)
+            {
                 TextureInfo texInfo = unFortmatObject[i] as TextureInfo;
                 string name = System.IO.Path.GetFileName(texInfo.Path);
-                if (EditorUtility.DisplayCancelableProgressBar("设置贴图格式", name, (i * 1.0f) / unFortmatObject.Count)) {
+                if (EditorUtility.DisplayCancelableProgressBar("设置贴图格式", name, (i * 1.0f) / unFortmatObject.Count))
+                {
                     Debug.LogWarning("ApplyFormatTextureObject Stop.");
                     break;
                 }
                 if (texInfo == null) continue;
                 TextureImporter tImporter = AssetImporter.GetAtPath(texInfo.Path) as TextureImporter;
                 if (tImporter == null) continue;
-                if (tImporter.textureType != data.TexType) {
+                if (tImporter.textureType != data.TexType)
+                {
                     tImporter.textureType = data.TexType;
                 }
-                if (tImporter.textureShape != data.ShapeType) {
+                if (tImporter.textureShape != data.ShapeType)
+                {
                     tImporter.textureShape = data.ShapeType;
                 }
                 tImporter.isReadable = data.ReadWriteEnable;
                 tImporter.mipmapEnabled = data.MipmapEnable;
 
-                if (data.MaxSize > 0) {
+                if (data.MaxSize > 0)
+                {
                     tImporter.maxTextureSize = data.MaxSize;
                 }
 
@@ -53,7 +56,8 @@ namespace ResourceFormat {
             }
             EditorUtility.ClearProgressBar();
 
-            for (int i = 0; i < unFortmatObject.Count; ++i) {
+            for (int i = 0; i < unFortmatObject.Count; ++i)
+            {
                 TextureInfo texInfo = unFortmatObject[i] as TextureInfo;
                 string name = System.IO.Path.GetFileName(texInfo.Path);
                 EditorUtility.DisplayProgressBar("更新贴图数据", name, (i * 1.0f) / unFortmatObject.Count);

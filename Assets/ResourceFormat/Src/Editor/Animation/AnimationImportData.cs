@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using EditorCommon;
 
 namespace ResourceFormat {
     public class AnimationImportData : ImportData {
@@ -7,7 +8,7 @@ namespace ResourceFormat {
         public ModelImporterAnimationCompression AnimationCompression = ModelImporterAnimationCompression.Off;
 
         public override bool IsMatch(string path) {
-            return PathConfig.IsAnimation(path) && base.IsMatch(path);
+            return EditorPath.IsAnimation(path) && base.IsMatch(path);
         }
         public override void CopyData(ImportData data) {
             AnimationImportData tData = data as AnimationImportData;

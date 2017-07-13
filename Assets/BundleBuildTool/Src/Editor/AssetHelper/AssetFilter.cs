@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -18,49 +19,15 @@ namespace BundleManager
         {
             m_filterList.Add(filterDelegate);
         }
-        public static List<UnityEngine.Object> FilterObjectByType(UnityEngine.Object[] assetsAtPath, BundleType bundleType, string assetPath)
+        public static List<UnityEngine.Object> FilterObjectByType(UnityEngine.Object[] assets, BundleType bundleType, string assetPath)
         {
             List<UnityEngine.Object> ret = new List<UnityEngine.Object>();
-            switch (bundleType)
+            foreach (UnityEngine.Object asset in assets)
             {
-            case BundleType.FBX:
-                foreach (UnityEngine.Object obj in assetsAtPath)
+                if (FilterObject(asset, bundleType))
                 {
-                    if (obj == null)
-                        continue;
-                    Type type = obj.GetType();
-                    if (type == typeof(AnimationClip) && obj.name != EditorConst.EDITOR_ANICLIP_NAME)
-                    {
-                        ret.Add(obj);
-                    }
-                    else
-                    {
-                        ret.Add(obj);
-                    }
+                    ret.Add(asset);
                 }
-                break;
-            case BundleType.Controller:
-                foreach (UnityEngine.Object obj in assetsAtPath)
-                {
-
-                    if (obj == null)
-                        continue;
-                    string typeName = obj.GetType().ToString();
-                    if (typeName.Contains("AnimatorStateMachine") || typeName.Contains("AnimatorStateTransition") ||
-                        typeName.Contains("AnimatorState") || typeName.Contains("AnimatorTransition") ||
-                        typeName.Contains("BlendTree"))
-                        continue;
-                    ret.Add(obj);
-                }
-
-                break;
-            default:
-                ret.AddRange(assetsAtPath);
-                break;
-            }
-            if (ret.Count == 0)
-            {
-                ret.AddRange(assetsAtPath);
             }
 
             for (int i = 0; i < m_filterList.Count; ++i)
@@ -69,6 +36,32 @@ namespace BundleManager
             }
 
             return ret;
+        }
+
+        private static bool FilterObject(UnityEngine.Object asset, BundleType bundleType)
+        {
+            if (asset == null)
+            {
+                return false;
+            }
+
+            switch (bundleType)
+            {
+            case BundleType.FBX:
+                return !(asset.GetType() == typeof(AnimationClip) && asset.name == EditorConst.EDITOR_ANICLIP_NAME);
+            case BundleType.Controller:
+                string typeName = asset.GetType().ToString();
+                for (int i = 0 ; i < EditorConst.EDITOR_CONTROL_NAMES.Length; ++i)
+                {
+                    if (typeName.Contains(EditorConst.EDITOR_CONTROL_NAMES[i]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            default:
+                return true;
+            }
         }
 
         private static List<FilterDelegate> m_filterList = new List<FilterDelegate>();

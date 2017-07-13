@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -10,7 +11,7 @@ namespace BundleManager
     {
         public static void ExportBundleMainfestToOutput()
         {
-            EditorCommon.CreateDirectory(BuildConfig.InterpretedOutputPath);
+            EditorTool.CreateDirectory(BuildConfig.InterpretedOutputPath);
 
             ExportBundleDictToOutput();
             ExportBundleStateToOutput();
@@ -26,10 +27,10 @@ namespace BundleManager
 
         public static void ExportBundleDictToOutput()
         {
-            EditorCommon.CreateDirectory(BuildConfig.InterpretedOutputPath);
+            EditorTool.CreateDirectory(BuildConfig.InterpretedOutputPath);
 
             BundleDataControl dataControl = BundleDataControl.Instance;
-            BundleDict bundleDict = new BundleDict();
+            BundleNexus bundleNexus = new BundleNexus();
             BundleData[] bundleData = BundleDataAccessor.Datas.ToArray();
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -58,7 +59,7 @@ namespace BundleManager
                     }
 
                     string bundlePath = path; // format path to load path!!!
-                    bundleDict.AddPathWithBundleName(bundlePath, bundleData[i].name);
+                    bundleNexus.AddPathToBundle(bundlePath, bundleData[i].name);
                 }
             }
 
@@ -66,14 +67,14 @@ namespace BundleManager
             {
                 for (int j = 0; j < bundleData[i].includs.Count; ++j)
                 {
-                    string[] dep = AssetDepend.GetDependenciesCache(bundleData[i].includs[j]);
+                    string[] dep = AssetDepot.GetDependenciesCache(bundleData[i].includs[j]);
                     for (int k = 0; k < dep.Length; ++k)
                     {
-                        if (PathConfig.IsScript(dep[k]) || PathConfig.IsShader(dep[k]))
+                        if (EditorPath.IsScript(dep[k]) || EditorPath.IsShader(dep[k]))
                             continue;
 
                         string bundleName = null;
-                        dict.TryGetValue(PathConfig.NormalizePathSplash(dep[k]), out bundleName);
+                        dict.TryGetValue(EditorPath.NormalizePathSplash(dep[k]), out bundleName);
                         if (string.IsNullOrEmpty(bundleName) || bundleName == bundleData[i].name)
                             continue;
 
@@ -81,21 +82,21 @@ namespace BundleManager
                         if (childBuildState.loadState == BundleLoadState.Preload || childBuildState.size == -1)
                             continue;
 
-                        bundleDict.AddBundleDepend(bundleData[i].name, bundleName);
+                        bundleNexus.AddBundleRely(bundleData[i].name, bundleName);
                     }
                 }
             }
 
-            bundleDict.SaveBytes(BuildConfig.BundleDictOutputPath);
+            bundleNexus.SaveBytes(BuildConfig.BundleDictOutputPath);
 
             AssetDatabase.ImportAsset(BuildConfig.BundleDictOutputPath, ImportAssetOptions.ForceSynchronousImport);
         }
 
         public static void ExportBundleStateToOutput()
         {
-            EditorCommon.CreateDirectory(BuildConfig.InterpretedOutputPath);
+            EditorTool.CreateDirectory(BuildConfig.InterpretedOutputPath);
             List<BundleState> stateList = new List<BundleState>(BundleDataAccessor.States);
-            EditorCommon.SaveJsonData<List<BundleState>>(stateList, BuildConfig.BundleStateOutputPath);
+            EditorTool.SaveJsonData<List<BundleState>>(stateList, BuildConfig.BundleStateOutputPath);
         }
     }
 }

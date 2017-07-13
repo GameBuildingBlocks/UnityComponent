@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BundleManager
 {
-    public static class AssetDepend
+    public static class AssetDepot
     {
         public static string[] GetDependenciesCache(string assetPath)
         {

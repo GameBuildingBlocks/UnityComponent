@@ -1,19 +1,21 @@
-using UnityEngine;
-using UnityEditor;
-using System.IO;
 using System.Collections.Generic;
-using System;
-using LitJson;
+using EditorCommon;
 
-namespace ResourceFormat {
-    public class ConfigData {
-        public static List<TextureImportData> TextureImportData {
-            get {
-                if (m_texSelectData == null) {
-                    m_texSelectData = EditorCommon.LoadJsonData<List<TextureImportData>>(RFConfig.TextureSelectFilePath);
+namespace ResourceFormat
+{
+    public class ConfigData
+    {
+        public static List<TextureImportData> TextureImportData
+        {
+            get
+            {
+                if (m_texSelectData == null)
+                {
+                    m_texSelectData = EditorTool.LoadJsonData<List<TextureImportData>>(FormatConfig.TextureImportPath);
                 }
 
-                if (m_texSelectData == null) {
+                if (m_texSelectData == null)
+                {
                     m_texSelectData = new List<TextureImportData>();
                 }
 
@@ -21,13 +23,17 @@ namespace ResourceFormat {
             }
         }
 
-        public static List<ModelImportData> ModelSelectData {
-            get {
-                if (m_modelSelectData == null) {
-                    m_modelSelectData = EditorCommon.LoadJsonData<List<ModelImportData>>(RFConfig.ModelSelectFilePath);
+        public static List<ModelImportData> ModelSelectData
+        {
+            get
+            {
+                if (m_modelSelectData == null)
+                {
+                    m_modelSelectData = EditorTool.LoadJsonData<List<ModelImportData>>(FormatConfig.ModelImportPath);
                 }
 
-                if (m_modelSelectData == null) {
+                if (m_modelSelectData == null)
+                {
                     m_modelSelectData = new List<ModelImportData>();
                 }
 
@@ -35,13 +41,17 @@ namespace ResourceFormat {
             }
         }
 
-        public static List<AnimationImportData> AnimationImportData {
-            get {
-                if (m_aniSelectData == null) {
-                    m_aniSelectData = EditorCommon.LoadJsonData<List<AnimationImportData>>(RFConfig.AnimationSelectFilePath);
+        public static List<AnimationImportData> AnimationImportData
+        {
+            get
+            {
+                if (m_aniSelectData == null)
+                {
+                    m_aniSelectData = EditorTool.LoadJsonData<List<AnimationImportData>>(FormatConfig.AnimationImportPath);
                 }
 
-                if (m_aniSelectData == null) {
+                if (m_aniSelectData == null)
+                {
                     m_aniSelectData = new List<AnimationImportData>();
                 }
 
@@ -49,15 +59,19 @@ namespace ResourceFormat {
             }
         }
 
-        public static void SaveData() {
-            if (m_texSelectData != null) {
-                EditorCommon.SaveJsonData<List<TextureImportData>>(m_texSelectData, RFConfig.TextureSelectFilePath);
+        public static void SaveData()
+        {
+            if (m_texSelectData != null)
+            {
+                EditorTool.SaveJsonData<List<TextureImportData>>(m_texSelectData, FormatConfig.TextureImportPath);
             }
-            if (m_modelSelectData != null) {
-                EditorCommon.SaveJsonData<List<ModelImportData>>(m_modelSelectData, RFConfig.ModelSelectFilePath);
+            if (m_modelSelectData != null)
+            {
+                EditorTool.SaveJsonData<List<ModelImportData>>(m_modelSelectData, FormatConfig.ModelImportPath);
             }
-            if (m_aniSelectData != null) {
-                EditorCommon.SaveJsonData<List<AnimationImportData>>(m_aniSelectData, RFConfig.AnimationSelectFilePath);
+            if (m_aniSelectData != null)
+            {
+                EditorTool.SaveJsonData<List<AnimationImportData>>(m_aniSelectData, FormatConfig.AnimationImportPath);
             }
         }
 

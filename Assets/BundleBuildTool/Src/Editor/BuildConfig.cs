@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -12,7 +13,7 @@ namespace BundleManager
         public static string InterpretedRootPath = "Assets/BundleBuildTool/Bundle/";
         public static string ResourceRootPath = "Assets";
         public static string BundleDataPath = InterpretedRootPath + "BundleData.txt";
-        public static string BundleStatePath = InterpretedRootPath + "BundleStatePath.txt";
+        public static string BundleStatePath = InterpretedRootPath + "BundleState.txt";
         public static string BundleImportDataPath = InterpretedRootPath + "BundleImportData.txt";
 
         public static BuildAssetBundleOptions CurrentBuildAssetOpts

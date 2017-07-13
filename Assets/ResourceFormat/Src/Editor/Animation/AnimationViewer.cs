@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
-namespace ResourceFormat {
-    public class AnimationViewer : BaseViewer {
-        private AnimationDataControl m_control;
-        public AnimationViewer(EditorWindow hostWindow) {
+namespace ResourceFormat
+{
+    public class AnimationViewer : BaseViewer
+    {
+        public AnimationViewer(EditorWindow hostWindow)
+        {
             // m_hostWindow = hostWindow;
 
             // create the table with a specified object type
@@ -39,7 +42,8 @@ namespace ResourceFormat {
             m_dataTable.OnSelected += m_control.OnDataSelected;
             m_showTable.OnSelected += m_control.OnInfoSelected;
         }
-        public override void Draw(Rect r) {
+        public override void Draw(Rect r)
+        {
             int border = TableConst.TableBorder;
             float split = TableConst.SplitterRatio;
             int toolbarHeight = 80;
@@ -56,7 +60,8 @@ namespace ResourceFormat {
                 GUILayout.Label("AnimationType: ", GUILayout.Width(120));
                 int aniType = GUILayout.SelectionGrid((int)data.AnimationType,
                     TableConst.AnimationType, TableConst.AnimationType.Length, TableStyles.ToolbarButton);
-                if (aniType != (int)data.AnimationType) {
+                if (aniType != (int)data.AnimationType)
+                {
                     data.AnimationType = (ModelImporterAnimationType)aniType;
                 }
             }
@@ -64,10 +69,11 @@ namespace ResourceFormat {
 
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
-                GUILayout.Label("AnimationType: ", GUILayout.Width(120));
+                GUILayout.Label("AnimationCompression: ", GUILayout.Width(120));
                 int aniCompression = GUILayout.SelectionGrid((int)data.AnimationCompression,
                     TableConst.AnimationCompression, TableConst.AnimationCompression.Length, TableStyles.ToolbarButton);
-                if (aniCompression != (int)data.AnimationCompression) {
+                if (aniCompression != (int)data.AnimationCompression)
+                {
                     data.AnimationCompression = (ModelImporterAnimationCompression)aniCompression;
                 }
 
@@ -77,30 +83,37 @@ namespace ResourceFormat {
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
                 bool showUnFormatObject = GUILayout.Toggle(m_control.UnFormat, " Show Unformat Data");
-                if (showUnFormatObject != m_control.UnFormat) {
+                if (showUnFormatObject != m_control.UnFormat)
+                {
                     m_control.UnFormat = showUnFormatObject;
                     m_control.OnDataSelectedIndex();
                 }
 
-                if (GUILayout.Button("Move Up Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120))) {
+                if (GUILayout.Button("Move Up Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)))
+                {
                     m_control.ModifDataPriority(true);
                 }
 
-                if (GUILayout.Button("Move Down Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120))) {
+                if (GUILayout.Button("Move Down Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)))
+                {
                     m_control.ModifDataPriority(false);
                 }
 
-                if (GUILayout.Button("Apply Select Format", TableStyles.ToolbarButton, GUILayout.MaxWidth(160))) {
+                if (GUILayout.Button("Apply Select Format", TableStyles.ToolbarButton, GUILayout.MaxWidth(160)))
+                {
                     AnimationFormater.ApplyFormatToObject(m_control.SelectData);
                 }
 
-                if (GUILayout.Button("Refresh Select Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140))) {
-                    if (m_control.Index != -1) {
+                if (GUILayout.Button("Refresh Select Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140)))
+                {
+                    if (m_control.Index != -1)
+                    {
                         m_control.RefreshDataByRootPath(m_control.SelectData.RootPath);
                     }
                 }
 
-                if (GUILayout.Button("Refresh All Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140))) {
+                if (GUILayout.Button("Refresh All Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140)))
+                {
                     m_control.RefreshBaseData();
                 }
 
@@ -110,16 +123,20 @@ namespace ResourceFormat {
 
             int startY = toolbarHeight + border;
             int height = (int)(r.height - startY - border * 2);
-            if (m_dataTable != null) {
+            if (m_dataTable != null)
+            {
                 m_dataTable.Draw(new Rect(border, startY, r.width - 2 * border, (int)(height * split - border * 1.5f)));
             }
 
-            if (m_showTable != null) {
+            if (m_showTable != null)
+            {
                 m_showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - 2 * border, (int)(height * (1.0f - split) - border * 1.5f)));
             }
 
             GUILayout.EndVertical();
             GUILayout.EndArea();
         }
+
+        private AnimationDataControl m_control;
     }
 }

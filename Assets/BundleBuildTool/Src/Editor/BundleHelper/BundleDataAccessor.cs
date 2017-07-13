@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -10,7 +11,7 @@ namespace BundleManager
             {
                 if (m_datas == null)
                 {
-                    m_datas = EditorCommon.LoadJsonData<List<BundleData>>(BuildConfig.BundleDataPath);
+                    m_datas = EditorTool.LoadJsonData<List<BundleData>>(BuildConfig.BundleDataPath);
                 }
                 if (m_datas == null)
                 {
@@ -26,7 +27,7 @@ namespace BundleManager
             {
                 if (m_states == null)
                 {
-                    m_states = EditorCommon.LoadJsonData<List<BundleState>>(BuildConfig.BundleStatePath);
+                    m_states = EditorTool.LoadJsonData<List<BundleState>>(BuildConfig.BundleStatePath);
                 }
                 if (m_states == null)
                 {
@@ -42,7 +43,7 @@ namespace BundleManager
             {
                 if (m_importDatas == null)
                 {
-                    m_importDatas = EditorCommon.LoadJsonData<List<BundleImportData>>(BuildConfig.BundleImportDataPath);
+                    m_importDatas = EditorTool.LoadJsonData<List<BundleImportData>>(BuildConfig.BundleImportDataPath);
                 }
                 if (m_importDatas == null)
                 {
@@ -62,12 +63,12 @@ namespace BundleManager
         {
             if (m_datas != null)
             {
-                EditorCommon.SaveJsonData<List<BundleData>>(m_datas, BuildConfig.BundleDataPath);
+                EditorTool.SaveJsonData<List<BundleData>>(m_datas, BuildConfig.BundleDataPath);
             }
 
             if (m_states != null)
             {
-                EditorCommon.SaveJsonData<List<BundleState>>(m_states, BuildConfig.BundleStatePath);
+                EditorTool.SaveJsonData<List<BundleState>>(m_states, BuildConfig.BundleStatePath);
             }
         }
 
@@ -75,7 +76,7 @@ namespace BundleManager
         {
             if (m_importDatas != null)
             {
-                EditorCommon.SaveJsonData<List<BundleImportData>>(m_importDatas, BuildConfig.BundleImportDataPath);
+                EditorTool.SaveJsonData<List<BundleImportData>>(m_importDatas, BuildConfig.BundleImportDataPath);
             }
         }
 

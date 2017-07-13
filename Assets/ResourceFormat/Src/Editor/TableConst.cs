@@ -3,8 +3,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace ResourceFormat {
-    public class TableConst {
+namespace ResourceFormat
+{
+    public class TableConst
+    {
         public static float TopBarHeight = 25;
         public static int InspectorWidth = 400;
         public static int TableBorder = 10;
@@ -28,13 +30,14 @@ namespace ResourceFormat {
         public static string[] AnimationType = { "None", "Legacy", "Generic", "Human" };
         public static string[] AnimationCompression = { "Off", "KeyframeReduction", "KeyframeReductionAndCompression", "Optimal" };
         public static string[] MeshCompression = { "Off", "Low", "Medium", "High" };
-        
-        
+
+
         public static TextureImporterFormat[] AndroidImporterFormat = { TextureImporterFormat.RGB24, TextureImporterFormat.ETC_RGB4, TextureImporterFormat.ETC2_RGB4 };
         public static TextureImporterFormat[] IosImporterFormat = { TextureImporterFormat.RGB24, TextureImporterFormat.PVRTC_RGB4 };
     }
 
-    public class TableStyles {
+    public class TableStyles
+    {
         public static GUIStyle Toolbar = "Toolbar";
         public static GUIStyle ToolbarButton = "ToolbarButton";
 

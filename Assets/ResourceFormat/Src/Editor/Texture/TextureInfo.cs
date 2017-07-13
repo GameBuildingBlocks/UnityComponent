@@ -1,20 +1,25 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
-namespace ResourceFormat {
-    public enum TextureType {
+namespace ResourceFormat
+{
+    public enum TextureType
+    {
         Default,
         NormalMap,
         Lightmap
     }
 
-    public enum TextureAlphaMode {
+    public enum TextureAlphaMode
+    {
         FormTexture,
         None,
     }
 
-    public class TextureInfo : BaseInfo {
+    public class TextureInfo : BaseInfo
+    {
         public bool ReadWriteEnable = false;
         public bool MipmapEnable = false;
         public TextureImporterFormat AndroidFormat;
@@ -24,9 +29,11 @@ namespace ResourceFormat {
         public FilterMode FilterMode;
         public TextureImporterShape ImportShape;
 
-        public static TextureInfo CreateTextureInfo(string assetPath) {
+        public static TextureInfo CreateTextureInfo(string assetPath)
+        {
             TextureInfo tInfo = null;
-            if (!m_dictTexInfo.TryGetValue(assetPath, out tInfo)) {
+            if (!m_dictTexInfo.TryGetValue(assetPath, out tInfo))
+            {
                 tInfo = new TextureInfo();
                 m_dictTexInfo.Add(assetPath, tInfo);
             }
@@ -46,14 +53,16 @@ namespace ResourceFormat {
             TextureImporterPlatformSettings settingIos = tImport.GetPlatformTextureSettings(EditorConst.PlatformIos);
             tInfo.IosFormat = settingIos.format;
             tInfo.MemSize = Mathf.Max(
-                EditorCommon.CalculateTextureSizeBytes(texture, tInfo.AndroidFormat),
-                EditorCommon.CalculateTextureSizeBytes(texture, tInfo.IosFormat));
+                EditorTool.CalculateTextureSizeBytes(texture, tInfo.AndroidFormat),
+                EditorTool.CalculateTextureSizeBytes(texture, tInfo.IosFormat));
 
-            if (Selection.activeObject != texture) {
+            if (Selection.activeObject != texture)
+            {
                 Resources.UnloadAsset(texture);
             }
 
-            if (++m_loadCount % 256 == 0) {
+            if (++m_loadCount % 256 == 0)
+            {
                 Resources.UnloadUnusedAssets();
             }
 
@@ -61,6 +70,6 @@ namespace ResourceFormat {
         }
 
         private static int m_loadCount = 0;
-        private static Dictionary<string, TextureInfo> m_dictTexInfo = new Dictionary<string,TextureInfo>();
+        private static Dictionary<string, TextureInfo> m_dictTexInfo = new Dictionary<string, TextureInfo>();
     }
 }

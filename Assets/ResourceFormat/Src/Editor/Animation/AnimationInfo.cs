@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
 namespace ResourceFormat {
     public class AnimationInfo : BaseInfo {
@@ -21,7 +22,7 @@ namespace ResourceFormat {
             mInfo.AnimationType = tImporter.animationType;
             mInfo.AnimationCompression = tImporter.animationCompression;
 
-            mInfo.MemSize = EditorCommon.CalculateAnimationSizeBytes(assetPath);
+            mInfo.MemSize = EditorTool.CalculateAnimationSizeBytes(assetPath);
 
             if (++m_loadCount % 256 == 0) {
                 Resources.UnloadUnusedAssets();

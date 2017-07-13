@@ -4,39 +4,39 @@ using System.Collections.Generic;
 
 namespace BundleManager
 {
-    public class BundleDict
+    public class BundleNexus
     {
-        public void AddPathWithBundleName(string path, string bundleName)
+        public void AddPathToBundle(string path, string bundleName)
         {
-            if (!m_pathToBundleName.ContainsKey(path))
+            if (!m_pathToBundle.ContainsKey(path))
             {
-                m_pathToBundleName.Add(path, bundleName);
+                m_pathToBundle.Add(path, bundleName);
             }
             else
             {
-                m_pathToBundleName[path] = bundleName;
+                m_pathToBundle[path] = bundleName;
             }
         }
 
-        public void AddBundleDepend(string bundleName, string depBundleName)
+        public void AddBundleRely(string bundleName, string relyBundle)
         {
             List<string> list = null;
-            if (!m_bundleDependDict.TryGetValue(bundleName, out list))
+            if (!m_bundleRely.TryGetValue(bundleName, out list))
             {
                 list = new List<string>();
-                m_bundleDependDict.Add(bundleName, list);
+                m_bundleRely.Add(bundleName, list);
             }
 
-            if (!list.Contains(depBundleName))
+            if (!list.Contains(relyBundle))
             {
-                list.Add(depBundleName);
+                list.Add(relyBundle);
             }
         }
 
         public void Clear()
         {
-            m_bundleDependDict.Clear();
-            m_pathToBundleName.Clear();
+            m_bundleRely.Clear();
+            m_pathToBundle.Clear();
         }
 
         public bool SaveBytes(string path)
@@ -44,9 +44,9 @@ namespace BundleManager
             FileStream file = File.Open(path, FileMode.Create);
             BinaryWriter binaryWriter = new BinaryWriter(file);
 
-            binaryWriter.Write(m_pathToBundleName.Count);
+            binaryWriter.Write(m_pathToBundle.Count);
 
-            using (var iterator = m_pathToBundleName.GetEnumerator())
+            using (var iterator = m_pathToBundle.GetEnumerator())
             {
                 while (iterator.MoveNext())
                 {
@@ -58,8 +58,8 @@ namespace BundleManager
                 }
             }
 
-            binaryWriter.Write(m_bundleDependDict.Count);
-            using (var iterator = m_bundleDependDict.GetEnumerator())
+            binaryWriter.Write(m_bundleRely.Count);
+            using (var iterator = m_bundleRely.GetEnumerator())
             {
                 while (iterator.MoveNext())
                 {
@@ -81,7 +81,7 @@ namespace BundleManager
             return true;
         }
 
-        Dictionary<string, string> m_pathToBundleName = new Dictionary<string, string>();
-        Dictionary<string, List<string>> m_bundleDependDict = new Dictionary<string, List<string>>();
+        private Dictionary<string, string> m_pathToBundle = new Dictionary<string, string>();
+        private Dictionary<string, List<string>> m_bundleRely = new Dictionary<string, List<string>>();
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -35,7 +36,7 @@ namespace BundleManager
                 return false;
 
             string outputPath = BuildConfig.GetBuildOutputPath(bundle.name);
-            EditorCommon.CreateDirectory(outputPath);
+            EditorTool.CreateDirectory(outputPath);
             uint crc = 0;
 
             string[] assetPaths = bundle.includs.ToArray();
@@ -100,7 +101,7 @@ namespace BundleManager
 
             uint crc = 0;
             string outputPath = BuildConfig.GetBuildOutputPath(bundle.name);
-            EditorCommon.CreateDirectory(outputPath);
+            EditorTool.CreateDirectory(outputPath);
 
             bool succeed = BuildAssetBundle(list.ToArray(), outputPath, out crc);
             succeed = UpdateBundleState(bundle, state, outputPath, succeed, crc);

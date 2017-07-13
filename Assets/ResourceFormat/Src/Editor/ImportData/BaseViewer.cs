@@ -1,12 +1,14 @@
 using UnityEngine;
 
-namespace ResourceFormat {
-    public class BaseViewer {
+namespace ResourceFormat
+{
+    public class BaseViewer
+    {
         public virtual void OnLeave() { }
         public virtual void OnEnter() { }
         public virtual void Draw(Rect view) { }
 
-        protected TableView m_dataTable;
-        protected TableView m_showTable;
+        protected EditorCommon.TableView m_dataTable;
+        protected EditorCommon.TableView m_showTable;
     }
-} 
+}

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -159,22 +160,22 @@ namespace BundleManager
         }
         public void RefreshBaseData()
         {
-            List<string> list = PathConfig.GetAssetPathList(BuildConfig.ResourceRootPath);
+            List<string> list = EditorPath.GetAssetPathList(BuildConfig.ResourceRootPath);
             RefreshList(list);
         }
         public void RefreshDataByRootPath(string path)
         {
-            List<string> list = PathConfig.GetAssetPathList(BuildConfig.ResourceRootPath + "/" + path);
+            List<string> list = EditorPath.GetAssetPathList(BuildConfig.ResourceRootPath + "/" + path);
             RefreshList(list);
         }
         private void RefreshList(List<string> list)
         {
             for (int i = 0; i < list.Count; ++i)
             {
-                string path = PathConfig.FormatAssetPath(list[i]);
+                string path = EditorPath.FormatAssetPath(list[i]);
                 string name = System.IO.Path.GetFileName(path);
                 EditorUtility.DisplayProgressBar("获取AssetPath数据", name, (i * 1.0f) / list.Count);
-                if (PathConfig.IsMeta(path))
+                if (EditorPath.IsMeta(path))
                     continue;
                 AssetPathInfo pathInfo = AssetPathInfo.CreatePathInfo(path);
                 m_pathInfoList.Add(pathInfo);
@@ -199,7 +200,7 @@ namespace BundleManager
 
             if (m_dataTable != null)
             {
-                m_dataTable.RefreshData(EditorCommon.ToObjectList<BundleImportData>(m_dataList));
+                m_dataTable.RefreshData(EditorTool.ToObjectList<BundleImportData>(m_dataList));
             }
 
             if (m_pathInfoList != null)
@@ -271,8 +272,8 @@ namespace BundleManager
 
         public BundleImportData GetPathImportData(string path)
         {
-            path = PathConfig.FormatAssetPath(path);
-            path = PathConfig.NormalizePathSplash(path);
+            path = EditorPath.FormatAssetPath(path);
+            path = EditorPath.NormalizePathSplash(path);
             AssetPathInfo pathInfo = AssetPathInfo.CreatePathInfo(path);
             if (pathInfo == null)
                 return null;

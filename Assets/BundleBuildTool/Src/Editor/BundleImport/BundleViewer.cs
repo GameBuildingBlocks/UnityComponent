@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -112,7 +113,7 @@ namespace BundleManager
 
                 if (GUILayout.Button("Build All Bundle", TableStyles.ToolbarButton, GUILayout.MaxWidth(140)))
                 {
-                    BundleAdapter.UpdateBundleBuildList(null);
+                    BundleAdapter.UpdateBundleBuildList();
                     BundleAdapter.BuildBundles();
                 }
 

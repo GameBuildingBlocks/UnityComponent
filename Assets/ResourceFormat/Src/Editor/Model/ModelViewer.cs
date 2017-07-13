@@ -1,11 +1,15 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
-namespace ResourceFormat {
-    public class ModelViewer : BaseViewer {
+namespace ResourceFormat
+{
+    public class ModelViewer : BaseViewer
+    {
         private ModelDataControl m_control;
-        public ModelViewer(EditorWindow hostWindow) {
+        public ModelViewer(EditorWindow hostWindow)
+        {
             // m_hostWindow = hostWindow;
 
             // create the table with a specified object type
@@ -49,7 +53,8 @@ namespace ResourceFormat {
             m_dataTable.OnSelected += m_control.OnDataSelected;
             m_showTable.OnSelected += m_control.OnInfoSelected;
         }
-        public override void Draw(Rect r) {
+        public override void Draw(Rect r)
+        {
             int border = TableConst.TableBorder;
             float split = TableConst.SplitterRatio;
             int toolbarHeight = 80;
@@ -66,24 +71,29 @@ namespace ResourceFormat {
                 GUILayout.Label("MeshCompression: ", GUILayout.Width(130));
                 int meshCompress = GUILayout.SelectionGrid((int)data.MeshCompression,
                     TableConst.MeshCompression, TableConst.MeshCompression.Length, TableStyles.ToolbarButton);
-                if (meshCompress != (int)data.MeshCompression) {
+                if (meshCompress != (int)data.MeshCompression)
+                {
                     data.MeshCompression = (ModelImporterMeshCompression)(meshCompress);
                 }
 
                 bool readWriteEnable = GUILayout.Toggle(data.ReadWriteEnable, " ReadWriteEnable");
-                if (readWriteEnable != data.ReadWriteEnable) {
+                if (readWriteEnable != data.ReadWriteEnable)
+                {
                     data.ReadWriteEnable = readWriteEnable;
                 }
                 bool optimizeMesh = GUILayout.Toggle(data.OptimizeMesh, " OptimizeMesh");
-                if (optimizeMesh != data.OptimizeMesh) {
+                if (optimizeMesh != data.OptimizeMesh)
+                {
                     data.OptimizeMesh = optimizeMesh;
                 }
                 bool importMaterials = GUILayout.Toggle(data.ImportMaterials, " ImportMaterials");
-                if (importMaterials != data.ImportMaterials) {
+                if (importMaterials != data.ImportMaterials)
+                {
                     data.ImportMaterials = importMaterials;
                 }
                 bool importAnimation = GUILayout.Toggle(data.ImportAnimation, " ImportAnimation");
-                if (importAnimation != data.ImportAnimation) {
+                if (importAnimation != data.ImportAnimation)
+                {
                     data.ImportAnimation = importAnimation;
                 }
             }
@@ -92,23 +102,28 @@ namespace ResourceFormat {
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
                 bool importUV2 = GUILayout.Toggle(data.ImportUV2, " ImportUV2");
-                if (importUV2 != data.ImportUV2) {
+                if (importUV2 != data.ImportUV2)
+                {
                     data.ImportUV2 = importUV2;
                 }
                 bool importUV3 = GUILayout.Toggle(data.ImportUV3, " ImportUV3");
-                if (importUV3 != data.ImportUV3) {
+                if (importUV3 != data.ImportUV3)
+                {
                     data.ImportUV3 = importUV3;
                 }
                 bool importUV4 = GUILayout.Toggle(data.ImportUV4, " ImportUV4");
-                if (importUV4 != data.ImportUV4) {
+                if (importUV4 != data.ImportUV4)
+                {
                     data.ImportUV4 = importUV4;
                 }
                 bool importNormal = GUILayout.Toggle(data.ImportNormal, " ImportNormal");
-                if (importNormal != data.ImportNormal) {
+                if (importNormal != data.ImportNormal)
+                {
                     data.ImportNormal = importNormal;
                 }
                 bool importTangent = GUILayout.Toggle(data.ImportTangent, " ImportTangent");
-                if (importTangent != data.ImportTangent) {
+                if (importTangent != data.ImportTangent)
+                {
                     data.ImportTangent = importTangent;
                 }
             }
@@ -117,30 +132,37 @@ namespace ResourceFormat {
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
                 bool showUnFormatObject = GUILayout.Toggle(m_control.UnFormat, " Show Unformat Data");
-                if (showUnFormatObject != m_control.UnFormat) {
+                if (showUnFormatObject != m_control.UnFormat)
+                {
                     m_control.UnFormat = showUnFormatObject;
                     m_control.OnDataSelectedIndex();
                 }
 
-                if (GUILayout.Button("Move Up Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120))) {
+                if (GUILayout.Button("Move Up Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)))
+                {
                     m_control.ModifDataPriority(true);
                 }
 
-                if (GUILayout.Button("Move Down Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120))) {
+                if (GUILayout.Button("Move Down Priority", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)))
+                {
                     m_control.ModifDataPriority(false);
                 }
 
-                if (GUILayout.Button("Apply Select Format", TableStyles.ToolbarButton, GUILayout.MaxWidth(160))) {
+                if (GUILayout.Button("Apply Select Format", TableStyles.ToolbarButton, GUILayout.MaxWidth(160)))
+                {
                     ModelFormater.ApplyFormatToObject(m_control.SelectData);
                 }
 
-                if (GUILayout.Button("Refresh Select Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140))) {
-                    if (m_control.Index != -1) {
+                if (GUILayout.Button("Refresh Select Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140)))
+                {
+                    if (m_control.Index != -1)
+                    {
                         m_control.RefreshDataByRootPath(m_control.SelectData.RootPath);
                     }
                 }
 
-                if (GUILayout.Button("Refresh All Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140))) {
+                if (GUILayout.Button("Refresh All Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(140)))
+                {
                     m_control.RefreshBaseData();
                 }
 
@@ -150,11 +172,13 @@ namespace ResourceFormat {
 
             int startY = toolbarHeight + border;
             int height = (int)(r.height - startY - border * 2);
-            if (m_dataTable != null) {
+            if (m_dataTable != null)
+            {
                 m_dataTable.Draw(new Rect(border, startY, r.width - 2 * border, (int)(height * split - border * 1.5f)));
             }
 
-            if (m_showTable != null) {
+            if (m_showTable != null)
+            {
                 m_showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - 2 * border, (int)(height * (1.0f - split) - border * 1.5f)));
             }
 

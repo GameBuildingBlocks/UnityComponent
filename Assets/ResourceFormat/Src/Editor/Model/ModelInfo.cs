@@ -1,18 +1,23 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
-namespace ResourceFormat {
-    public class ModelInfo : BaseInfo {
+namespace ResourceFormat
+{
+    public class ModelInfo : BaseInfo
+    {
         public bool ReadWriteEnable = false;
         public bool OptimizeMesh = false;
         public bool ImportMaterials;
         public bool ImportAnimation;
         public ModelImporterMeshCompression MeshCompression = ModelImporterMeshCompression.Off;
 
-        public static ModelInfo CreateModelInfo(string assetPath) {
+        public static ModelInfo CreateModelInfo(string assetPath)
+        {
             ModelInfo tInfo = null;
-            if (!m_dictTexInfo.TryGetValue(assetPath, out tInfo)) {
+            if (!m_dictTexInfo.TryGetValue(assetPath, out tInfo))
+            {
                 tInfo = new ModelInfo();
                 m_dictTexInfo.Add(assetPath, tInfo);
             }
@@ -26,9 +31,10 @@ namespace ResourceFormat {
             tInfo.ImportAnimation = tImport.importAnimation;
             tInfo.MeshCompression = tImport.meshCompression;
 
-            tInfo.MemSize = EditorCommon.CalculateModelSizeBytes(assetPath);
+            tInfo.MemSize = EditorTool.CalculateModelSizeBytes(assetPath);
 
-            if (m_loadCount % 256 == 0) {
+            if (m_loadCount % 256 == 0)
+            {
                 Resources.UnloadUnusedAssets();
             }
 

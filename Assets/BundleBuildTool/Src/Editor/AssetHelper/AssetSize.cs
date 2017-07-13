@@ -3,49 +3,48 @@ using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEditor;
 using System.Collections.Generic;
+using EditorCommon;
 
 namespace BundleManager
 {
     public class AssetSize
     {
-        public static long CalcAssetSize(string path, BundleType type)
+        public static long CalcAssetSize(string assetPath, BundleType type)
         {
-            path = PathConfig.FormatAssetPath(path);
-            path = PathConfig.NormalizePathSplash(path);
+            assetPath = EditorPath.FormatAssetPath(assetPath);
+            assetPath = EditorPath.NormalizePathSplash(assetPath);
 
             long ret = 0;
-            if (m_pathFileSize.TryGetValue(path, out ret))
+            if (m_pathFileSize.TryGetValue(assetPath, out ret))
             {
                 return ret;
             }
 
-            UnityEngine.Object[] objs = null;
+            UnityEngine.Object[] assets = null;
 
             switch (type)
             {
             case BundleType.Texture:
-                objs = AssetDatabase.LoadAllAssetsAtPath(path);
-                for (int i = 0; i < objs.Length; ++i)
+                assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+                for (int i = 0; i < assets.Length; ++i)
                 {
-                    if (objs[i] is Texture)
+                    if (assets[i] is Texture)
                     {
-#pragma warning disable 0618
-                        ret += Profiler.GetRuntimeMemorySize(objs[i]);
-#pragma warning restore 0618
+                        ret += EditorTool.GetRuntimeMemorySize(assets[i]);
                     }
                 }
 
                 break;
             case BundleType.Material:
-                string[] deps = AssetDepend.GetDependenciesCache(path);
+                string[] deps = AssetDepot.GetDependenciesCache(assetPath);
                 for (int i = 0; i < deps.Length; ++i)
                 {
-                    if (PathConfig.IsTexture(deps[i]))
+                    if (EditorPath.IsTexture(deps[i]))
                     {
                         BundleImportData data = BundleDataControl.Instance.GetPathImportData(deps[i]);
                         if (data == null || data.SkipData)
                         {
-                            ret += EditorCommon.CalculateTextureSizeBytes(deps[i]);
+                            ret += EditorTool.CalculateTextureSizeBytes(deps[i]);
                         }
                     }
                 }
@@ -54,30 +53,28 @@ namespace BundleManager
             case BundleType.FBX:
             case BundleType.Controller:
             case BundleType.Animation:
-                objs = AssetDatabase.LoadAllAssetsAtPath(path);
-                List<UnityEngine.Object> list = AssetFilter.FilterObjectByType(objs, type, path);
+                assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+                List<UnityEngine.Object> list = AssetFilter.FilterObjectByType(assets, type, assetPath);
                 for (int i = 0; i < list.Count; ++i)
                 {
-#pragma warning disable 0618
-                    ret += Profiler.GetRuntimeMemorySize(list[i]);
-#pragma warning restore 0618
+                    ret += EditorTool.GetRuntimeMemorySize(list[i]);
                 }
                 break;
             default:
-                FileInfo fileInfo = new FileInfo(path);
+                FileInfo fileInfo = new FileInfo(assetPath);
                 ret = fileInfo.Length;
                 break;
             }
 
-            for (int i = 0; objs != null && i < objs.Length; ++i)
+            for (int i = 0; assets != null && i < assets.Length; ++i)
             {
-                if ((!(objs[i] is GameObject)) && (!(objs[i] is Component)))
+                if ((!(assets[i] is GameObject)) && (!(assets[i] is Component)))
                 {
-                    Resources.UnloadAsset(objs[i]);
+                    Resources.UnloadAsset(assets[i]);
                 }
             }
 
-            m_pathFileSize.Add(path, ret);
+            m_pathFileSize.Add(assetPath, ret);
             return ret;
         }
         public static void Clear()

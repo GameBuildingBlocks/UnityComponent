@@ -3,16 +3,16 @@ using UnityEngine.Profiling;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
+using EditorCommon;
 
 namespace BundleManager
 {
     public static class BundleAdapter
     {
         private static BundleDataControl m_dataControl = BundleDataControl.Instance;
-        
         private static Dictionary<string, bool> m_bundleDict = new Dictionary<string, bool>();
         private static Dictionary<string, string> m_specialCache = new Dictionary<string, string>();
-        private static bool m_useFilter = false;
+        private static bool m_buildAll = false;
         private static uint m_processCnt = 0;
 
         public static void RefreshData()
@@ -21,7 +21,7 @@ namespace BundleManager
             m_bundleDict.Clear();
             m_specialCache.Clear();
             AssetSize.Clear();
-            AssetDepend.Clear();
+            AssetDepot.Clear();
         }
 
         public static void CreateBundles()
@@ -37,7 +37,7 @@ namespace BundleManager
                     Debug.LogWarning("[BundleAdapter] CreateBundles Stop.");
                     break;
                 }
-                string[] dep = AssetDepend.GetDependenciesCache(list[i]);
+                string[] dep = AssetDepot.GetDependenciesCache(list[i]);
                 for (int j = 0; j < dep.Length; ++j)
                 {
                     if (string.IsNullOrEmpty(dep[j]))
@@ -56,35 +56,9 @@ namespace BundleManager
             AssetDatabase.SaveAssets();
 
         }
-        public static void UpdateBundleBuildList(FilterHandler filter)
+        public static void UpdateBundleBuildList()
         {
-            if (filter == null)
-            {
-                m_useFilter = false;
-                return;
-            }
-            m_useFilter = true;
-            List<BundleImportData> dataList = m_dataControl.DataList;
-            for (int l = 0; l < dataList.Count; ++l)
-            {
-                BundleImportData data = dataList[l];
-                if (data == null)
-                    continue;
-                if (EditorUtility.DisplayCancelableProgressBar("Update Bundle List", data.RootPath, (l * 1.0f) / dataList.Count))
-                {
-                    Debug.LogWarning("[BundleAdapter] Update Bundle List Stop.");
-                    break;
-                }
-                string parentName = BundleDataManager.GetIndexBundleName(l);
-                BundleData parent = BundleDataManager.GetBundleData(parentName);
-                for (int i = 0; parent != null && i < parent.children.Count; ++i)
-                {
-                    ProcessUpdateBundleList(parent.children[i], data, filter);
-                }
-            }
-            EditorUtility.ClearProgressBar();
-
-            ProcessDependBundleList();
+            m_buildAll = true;
         }
         public static void BuildBundles()
         {
@@ -136,7 +110,7 @@ namespace BundleManager
                 {
                     continue;
                 }
-                if (m_useFilter && !m_bundleDict.ContainsKey(child.name))
+                if (m_buildAll && !m_bundleDict.ContainsKey(child.name))
                 {
                     continue;
                 }
@@ -180,7 +154,7 @@ namespace BundleManager
                         continue;
                     for (int j = 0; j < data.includs.Count; ++j)
                     {
-                        string[] dep = AssetDepend.GetDependenciesCache(data.includs[j]);
+                        string[] dep = AssetDepot.GetDependenciesCache(data.includs[j]);
                         for (int k = 0; k < dep.Length; ++k)
                         {
                             string bundleName = BundleDataManager.GetPathBundleName(dep[k]);
@@ -193,7 +167,7 @@ namespace BundleManager
                 }
             }
         }
-        private static void ProcessUpdateBundleList(string bundleName, BundleImportData selectData, FilterHandler filter)
+        private static void ProcessUpdateBundleList(string bundleName)
         {
             BundleData data = BundleDataManager.GetBundleData(bundleName);
             if (data == null)
@@ -201,26 +175,7 @@ namespace BundleManager
 
             for (int i = 0; i < data.includs.Count; ++i)
             {
-                if (filter == null || filter(data.includs[i]))
-                {
-                    _AddToDict(data.name, m_bundleDict);
-                    continue;
-                }
-                if (!selectData.Publish)
-                    continue;
-                string[] dep = AssetDepend.GetDependenciesCache(data.includs[i]);
-                for (int k = 0; k < dep.Length; ++k)
-                {
-                    if (!filter(dep[k]))
-                    {
-                        continue;
-                    }
-                    if (!BundleDataManager.CheckPathInBundle(dep[k]))
-                    {
-                        _AddToDict(data.name, m_bundleDict);
-                        break;
-                    }
-                }
+                _AddToDict(data.name, m_bundleDict);
             }
         }
         private static void PreProcessSpecialBundle()
@@ -258,7 +213,7 @@ namespace BundleManager
             if (m_specialCache.ContainsKey(path))
                 return;
             m_specialCache.Add(path, path);
-            if (PathConfig.IsShader(path))
+            if (EditorPath.IsShader(path))
             {
                 if (!BundleDataManager.CheckPathInBundle(path))
                 {
@@ -269,7 +224,7 @@ namespace BundleManager
                     }
                 }
             }
-            else if (PathConfig.IsMaterial(path))
+            else if (EditorPath.IsMaterial(path))
             {
                 BundleData shaderBundle = BundleDataManager.GetBundleData(BundleName.BN_SHADER);
                 if (shaderBundle == null)
@@ -295,7 +250,7 @@ namespace BundleManager
                 }
                 ProcessClear();
             }
-            else if (PathConfig.IsScript(path))
+            else if (EditorPath.IsScript(path))
             {
                 BundleData script = BundleDataManager.GetBundleData(BundleName.BN_SCRIPT);
                 if (script != null && script.children.Count > 0)

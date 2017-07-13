@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEditor;
+using EditorCommon;
 
 namespace BundleManager
 {
@@ -37,13 +38,13 @@ namespace BundleManager
             {
                 path = path.Substring(index + BuildConfig.ResourceRootPath.Length);
             }
-            string packagePath = PathConfig.NormalizePathSplash(path);
+            string packagePath = EditorPath.NormalizePathSplash(path);
             if (packagePath.StartsWith("/"))
             {
                 packagePath = packagePath.Substring(1);
             }
 
-            string formatPath = PathConfig.NormalizePathSplash(RootPath);
+            string formatPath = EditorPath.NormalizePathSplash(RootPath);
             if (!string.IsNullOrEmpty(formatPath) &&
                 !packagePath.StartsWith(formatPath, System.StringComparison.OrdinalIgnoreCase))
                 return false;

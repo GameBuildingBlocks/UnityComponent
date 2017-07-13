@@ -1,21 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using EditorCommon;
 
-namespace ResourceFormat {
-    public class TextureImportData : ImportData {
-        public int TextureTypeIndex {
+namespace ResourceFormat
+{
+    public class TextureImportData : ImportData
+    {
+        public int TextureTypeIndex
+        {
             get { return ArrayUtility.IndexOf<TextureImporterType>(TableConst.ImporterType, TexType); }
             set { TexType = TableConst.ImporterType[value]; }
         }
-        public int TextureShapeIndex {
+        public int TextureShapeIndex
+        {
             get { return ArrayUtility.IndexOf<TextureImporterShape>(TableConst.ImporterShape, ShapeType); }
             set { ShapeType = TableConst.ImporterShape[value]; }
         }
-        public int AndroidFormatIndex {
+        public int AndroidFormatIndex
+        {
             get { return ArrayUtility.IndexOf<TextureImporterFormat>(TableConst.AndroidImporterFormat, AndroidFormat); }
-            set { AndroidFormat = TableConst.AndroidImporterFormat[value];}
+            set { AndroidFormat = TableConst.AndroidImporterFormat[value]; }
         }
-        public int IosFormatIndex {
+        public int IosFormatIndex
+        {
             get { return ArrayUtility.IndexOf<TextureImporterFormat>(TableConst.IosImporterFormat, IosFormat); }
             set { IosFormat = TableConst.IosImporterFormat[value]; }
         }
@@ -31,26 +38,33 @@ namespace ResourceFormat {
         public bool ForceSet = false;
         public bool AlwaysMatch = false;
 
-        public override bool IsMatch(string path) {
-            if (AlwaysMatch) {
+        public override bool IsMatch(string path)
+        {
+            if (AlwaysMatch)
+            {
                 return true;
             }
-            bool pathMatch = PathConfig.IsTexture(path) && base.IsMatch(path);
-            if (!pathMatch || ForceSet) {
+            bool pathMatch = EditorPath.IsTexture(path) && base.IsMatch(path);
+            if (!pathMatch || ForceSet)
+            {
                 return pathMatch;
             }
             TextureImporter texureImporter = AssetImporter.GetAtPath(path) as TextureImporter;
 #pragma warning disable 0618
-            if (TexType == TextureImporterType.Cubemap) {
+            if (TexType == TextureImporterType.Cubemap)
+            {
 #pragma warning restore 0618
                 if (texureImporter.textureShape != TextureImporterShape.TextureCube) return false;
                 else return true;
-            } else {
+            }
+            else
+            {
                 if (texureImporter.textureShape == TextureImporterShape.TextureCube) return false;
             }
             return texureImporter.textureType == TexType;
         }
-        public override void CopyData(ImportData data) {
+        public override void CopyData(ImportData data)
+        {
             TextureImportData tData = data as TextureImportData;
             if (tData == null) return;
 
@@ -64,34 +78,47 @@ namespace ResourceFormat {
             MaxSize = tData.MaxSize;
             AlwaysMatch = tData.AlwaysMatch;
         }
-        public override void ClearObject() {
+        public override void ClearObject()
+        {
             m_initUnFormatList = false;
             base.ClearObject();
         }
-        public void AddObject(TextureInfo textureInfo) {
+        public void AddObject(TextureInfo textureInfo)
+        {
             TotalCount = TotalCount + 1;
             TotalMemuse = TotalMemuse + textureInfo.MemSize;
             m_objects.Add(textureInfo);
-            if (m_initUnFormatList && IsFormatTexture(textureInfo)) {
+            if (m_initUnFormatList && IsFormatTexture(textureInfo))
+            {
                 m_unFortmatObjects.Add(textureInfo);
             }
         }
-        public List<object> GetObjects(bool unformat) {
-            if (!unformat) {
+        public List<object> GetObjects(bool unformat)
+        {
+            if (!unformat)
+            {
                 return m_objects;
-            } else {
-                if (!m_initUnFormatList) {
+            }
+            else
+            {
+                if (!m_initUnFormatList)
+                {
                     m_initUnFormatList = true;
                     _InitUnFormatList();
                 }
                 return m_unFortmatObjects;
             }
         }
-        public TextureImporterFormat GetFormatByAlphaMode(TextureImporterFormat format, TextureImporter tImporter) {
-            if (AlphaMode == TextureAlphaMode.None || tImporter.alphaSource == TextureImporterAlphaSource.None
-                || !tImporter.DoesSourceTextureHaveAlpha()) {
+        public TextureImporterFormat GetFormatByAlphaMode(TextureImporterFormat format, TextureImporter tImporter)
+        {
+            if (AlphaMode == TextureAlphaMode.None || 
+                tImporter.alphaSource == TextureImporterAlphaSource.None ||
+                !tImporter.DoesSourceTextureHaveAlpha())
+            {
                 return format;
-            } else {
+            }
+            else
+            {
                 if (format == TextureImporterFormat.ETC_RGB4 || format == TextureImporterFormat.ETC2_RGB4)
                     return TextureImporterFormat.ETC2_RGBA8;
                 if (format == TextureImporterFormat.PVRTC_RGB4)
@@ -101,7 +128,8 @@ namespace ResourceFormat {
                 return format;
             }
         }
-        public bool IsFormatTexture(TextureInfo tInfo) {
+        public bool IsFormatTexture(TextureInfo tInfo)
+        {
             TextureImporter tImporter = AssetImporter.GetAtPath(tInfo.Path) as TextureImporter;
             if (tImporter == null) return false;
             if (tImporter.isReadable != ReadWriteEnable) return false;
@@ -117,13 +145,16 @@ namespace ResourceFormat {
             if (tImporter.maxTextureSize != settingIos.maxTextureSize) return false;
             return true;
         }
-        private void _InitUnFormatList() {
-            for (int i = 0; i < m_objects.Count; ++i) {
+        private void _InitUnFormatList()
+        {
+            for (int i = 0; i < m_objects.Count; ++i)
+            {
                 TextureInfo texInfo = m_objects[i] as TextureInfo;
                 if (texInfo == null) continue;
                 string name = System.IO.Path.GetFileName(texInfo.Path);
                 EditorUtility.DisplayProgressBar("更新非法贴图数据", name, (i * 1.0f) / m_objects.Count);
-                if (!IsFormatTexture(texInfo)) {
+                if (!IsFormatTexture(texInfo))
+                {
                     m_unFortmatObjects.Add(texInfo);
                 }
             }

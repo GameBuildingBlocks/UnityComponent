@@ -2,16 +2,20 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-namespace ResourceFormat {
-    public enum FormatMode {
+namespace ResourceFormat
+{
+    public enum FormatMode
+    {
         Texture,
         Model,
         Animation,
     }
 
-    public class ViewerMgr {
+    public class ViewerMgr
+    {
 
-        public ViewerMgr(EditorWindow host) {
+        public ViewerMgr(EditorWindow host)
+        {
             int curMode = EditorPrefs.GetInt(TableConst.CurrentMode);
             m_currentMode = (FormatMode)(curMode);
 
@@ -23,40 +27,48 @@ namespace ResourceFormat {
             };
         }
 
-        public BaseViewer GetCurrentMode() {
+        public BaseViewer GetCurrentMode()
+        {
             BaseViewer view;
-            if (!m_modes.TryGetValue(m_currentMode, out view)) {
+            if (!m_modes.TryGetValue(m_currentMode, out view))
+            {
                 return null;
             }
             return view;
         }
 
-        public void SwitchTo(FormatMode newMode) {
-            if (m_currentMode == newMode) {
+        public void SwitchTo(FormatMode newMode)
+        {
+            if (m_currentMode == newMode)
+            {
                 return;
             }
 
             BaseViewer preViewer = GetCurrentMode();
-            if (preViewer != null) {
+            if (preViewer != null)
+            {
                 preViewer.OnLeave();
             }
 
             m_currentMode = newMode;
 
             BaseViewer curViewer = GetCurrentMode();
-            if (curViewer != null) {
+            if (curViewer != null)
+            {
                 curViewer.OnEnter();
             }
 
             EditorPrefs.SetInt(TableConst.CurrentMode, (int)(m_currentMode));
         }
 
-        public void OnGUI(Rect rect) {
+        public void OnGUI(Rect rect)
+        {
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
             GUILayout.Label("Mode: ", GUILayout.MaxWidth(60));
             int selMode = GUILayout.SelectionGrid((int)m_currentMode,
                 TableConst.Modes, TableConst.Modes.Length, TableStyles.ToolbarButton);
-            if (selMode != (int)m_currentMode) {
+            if (selMode != (int)m_currentMode)
+            {
                 SwitchTo((FormatMode)selMode);
             }
             GUILayout.EndHorizontal();
@@ -64,7 +76,8 @@ namespace ResourceFormat {
             float yOffset = TableConst.TopBarHeight;
             Rect viewRect = new Rect(0, yOffset, rect.width, rect.height - yOffset);
             BaseViewer viewTable = GetCurrentMode();
-            if (viewTable != null) {
+            if (viewTable != null)
+            {
                 viewTable.Draw(viewRect);
             }
         }
