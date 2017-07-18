@@ -88,6 +88,7 @@ namespace BundleManager
 
             BundleBuildHelper.PopAssetDependencies();
 
+            BundleDataAccessor.SaveData();
             BundleExport.ExportBundleMainfestToOutput();
 
             AssetDatabase.SaveAssets();
@@ -110,7 +111,7 @@ namespace BundleManager
                 {
                     continue;
                 }
-                if (m_buildAll && !m_bundleDict.ContainsKey(child.name))
+                if (!m_buildAll && !m_bundleDict.ContainsKey(child.name))
                 {
                     continue;
                 }

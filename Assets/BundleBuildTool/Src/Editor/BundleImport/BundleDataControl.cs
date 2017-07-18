@@ -170,6 +170,7 @@ namespace BundleManager
         }
         private void RefreshList(List<string> list)
         {
+            m_pathInfoList.Clear();
             for (int i = 0; i < list.Count; ++i)
             {
                 string path = EditorPath.FormatAssetPath(list[i]);

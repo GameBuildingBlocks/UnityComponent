@@ -113,7 +113,7 @@ namespace BundleManager
                 return false;
             }
 
-            string guid = AssetDatabase.AssetPathToGUID(path);
+            string guid = GetPathGUID(path);
             if (m_guidToBundle.ContainsKey(guid))
             {
                 return false;
@@ -134,7 +134,7 @@ namespace BundleManager
             }
 
             BundleData bundle = m_dataDict[bundleName];
-            string guid = AssetDatabase.AssetPathToGUID(path);
+            string guid = GetPathGUID(path);
 
             bundle.includs.Add(path);
             m_guidToBundle.Add(guid, bundleName);
@@ -149,7 +149,7 @@ namespace BundleManager
             {
                 return;
             }
-            string guid = AssetDatabase.AssetPathToGUID(path);
+            string guid = GetPathGUID(path);
 
             if (m_guidToBundle.ContainsKey(guid))
             {
@@ -158,7 +158,7 @@ namespace BundleManager
 
             for (int i = 0; i < bundle.includs.Count; ++i)
             {
-                string nGuid = AssetDatabase.AssetPathToGUID(bundle.includs[i]);
+                string nGuid = GetPathGUID(bundle.includs[i]);
                 if (nGuid == guid)
                 {
                     bundle.includs.RemoveAt(i);
@@ -185,7 +185,7 @@ namespace BundleManager
 
             for (int i = 0; i < bundle.includs.Count; ++i)
             {
-                string nGuid = AssetDatabase.AssetPathToGUID(bundle.includs[i]);
+                string nGuid = GetPathGUID(bundle.includs[i]);
                 m_guidToBundle.Remove(nGuid);
             }
 
@@ -235,7 +235,7 @@ namespace BundleManager
         }
         public static string GetPathBundleName(string assetPath)
         {
-            string guid = AssetDatabase.AssetPathToGUID(assetPath);
+            string guid = GetPathGUID(assetPath);
             string ret = string.Empty;
             if (m_guidToBundle.TryGetValue(guid, out ret))
             {
@@ -243,9 +243,17 @@ namespace BundleManager
             }
             return string.Empty;
         }
+        public static string GetPathGUID(string path)
+        {
+            if (path.StartsWith("Assets/", System.StringComparison.OrdinalIgnoreCase))
+            {
+                return AssetDatabase.AssetPathToGUID(path);
+            }
+            return path;
+        }
         public static bool CheckPathInBundle(string path)
         {
-            string guid = AssetDatabase.AssetPathToGUID(path);
+            string guid = GetPathGUID(path);
             return m_guidToBundle.ContainsKey(guid);
         }
         public static bool IsBundleFull(BundleData bundle, int maxCount, int memSize)
@@ -309,7 +317,7 @@ namespace BundleManager
 
                 for (int i = 0; i < bundleData.includs.Count; ++i)
                 {
-                    string guid = AssetDatabase.AssetPathToGUID(bundleData.includs[i]);
+                    string guid = GetPathGUID(bundleData.includs[i]);
                     if (!m_guidToBundle.ContainsKey(guid))
                     {
                         m_guidToBundle.Add(guid, bundleData.name);
