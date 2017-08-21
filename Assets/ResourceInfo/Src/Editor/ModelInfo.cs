@@ -24,6 +24,11 @@ namespace ResourceFormat
 
         public static ModelInfo CreateModelInfo(string assetPath)
         {
+            if (!EditorPath.IsModel(assetPath))
+            {
+                return null;
+            }
+
             ModelInfo tInfo = null;
             if (!m_dictModelInfo.TryGetValue(assetPath, out tInfo))
             {
@@ -33,7 +38,7 @@ namespace ResourceFormat
             ModelImporter tImport = AssetImporter.GetAtPath(assetPath) as ModelImporter;
             Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath);
 
-            if (tImport == null)
+            if (tImport == null || mesh == null)
                 return null;
 
             tInfo.Path = assetPath;
@@ -61,6 +66,24 @@ namespace ResourceFormat
             }
 
             return tInfo;
+        }
+
+        public static List<ModelInfo> GetModelInfoByDirectory(string dir)
+        {
+            List<ModelInfo> modelInfoList = new List<ModelInfo>();
+            List<string> list = new List<string>();
+            EditorPath.ScanDirectoryFile(dir, true, list);
+            for (int i = 0; i < list.Count; ++i)
+            {
+                string assetPath = EditorPath.FormatAssetPath(list[i]);
+                ModelInfo modelInfo = CreateModelInfo(assetPath);
+                if (modelInfo != null)
+                {
+                    modelInfoList.Add(modelInfo);
+                }
+            }
+
+            return modelInfoList;
         }
 
         private static int m_loadCount = 0;

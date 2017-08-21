@@ -35,6 +35,11 @@ namespace ResourceFormat
 
         public static TextureInfo CreateTextureInfo(string assetPath)
         {
+            if (!EditorPath.IsTexture(assetPath))
+            {
+                return null;
+            }
+
             TextureInfo tInfo = null;
             if (!m_dictTexInfo.TryGetValue(assetPath, out tInfo))
             {
@@ -74,6 +79,24 @@ namespace ResourceFormat
             }
 
             return tInfo;
+        }
+
+        public static List<TextureInfo> GetTextureInfoByDirectory(string dir)
+        {
+            List<TextureInfo> texInfoList = new List<TextureInfo>();
+            List<string> list = new List<string>();
+            EditorPath.ScanDirectoryFile(dir, true, list);
+            for (int i = 0; i < list.Count; ++i)
+            {
+                string assetPath = EditorPath.FormatAssetPath(list[i]);
+                TextureInfo texInfo = CreateTextureInfo(assetPath);
+                if (texInfo != null)
+                {
+                    texInfoList.Add(texInfo);
+                }
+            }
+
+            return texInfoList;
         }
 
         private static int m_loadCount = 0;

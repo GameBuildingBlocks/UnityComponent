@@ -7,8 +7,17 @@ namespace ResourceFormat
 {
     public class ModelOverviewReport
     {
+        [MenuItem(OverviewConfig.ModelReportMenu)]
+        public static void GenerateRportByConfig()
+        {
+            List<ModelInfo> modelInfoList = ModelInfo.GetModelInfoByDirectory(OverviewConfig.RootPath);
+            GenerateReport(OverviewConfig.ModelReportPath, modelInfoList);
+        }
+
         public static void GenerateReport(string filePath, List<ModelInfo> modelInfoList)
         {
+            UnityEngine.Debug.Log("Begin ModelOverviewReport Generate.");
+
             EditorCommon.EditorTool.CreateDirectory(filePath);
 
             FileStream fs = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
@@ -25,6 +34,8 @@ namespace ResourceFormat
 
             sw.Flush();
             sw.Close();
+
+            UnityEngine.Debug.Log("End ModelOverviewReport Generate.");
         }
 
         private static string GenerateReadWriteData(List<ModelInfo> modelInfoList)
@@ -192,12 +203,12 @@ namespace ResourceFormat
                 {
                     if (bData[i])
                     {
-                        sb.Append(strData[i]);
+                        sb.Append("," + strData[i]);
                     }
                 }
                 sb.Append("|");
 
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
@@ -238,7 +249,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}|", itor.Key);
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
@@ -280,7 +291,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}-{1}|", itor.Key * verTexMod, (itor.Key + 1) * verTexMod - 1);
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
@@ -322,7 +333,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}-{1}|", itor.Key * triTexMod, (itor.Key + 1) * triTexMod - 1);
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 

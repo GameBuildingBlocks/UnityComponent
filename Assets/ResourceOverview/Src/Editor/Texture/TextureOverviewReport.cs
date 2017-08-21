@@ -7,8 +7,17 @@ namespace ResourceFormat
 {
     public class TextureOverviewReport
     {
+        [MenuItem(OverviewConfig.TextureReportMenu)]
+        public static void GenerateRportByConfig()
+        {
+            List<TextureInfo> texInfoList = TextureInfo.GetTextureInfoByDirectory(OverviewConfig.RootPath);
+            GenerateReport(OverviewConfig.TextureReportPath, texInfoList);
+        }
+
         public static void GenerateReport(string filePath, List<TextureInfo> texInfoList)
         {
+            UnityEngine.Debug.Log("Begin TextureOverviewReport Generate.");
+
             EditorCommon.EditorTool.CreateDirectory(filePath);
 
             FileStream fs = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
@@ -25,6 +34,8 @@ namespace ResourceFormat
 
             sw.Flush();
             sw.Close();
+
+            UnityEngine.Debug.Log("End TextureOverviewReport Generate.");
         }
 
         private static string GenerateReadWirteData(List<TextureInfo> texInfoList)
@@ -138,7 +149,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}|", texTypeStr[(int)itor.Key]);
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
@@ -190,7 +201,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}|", SizeStr[(int)itor.Key]);
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
@@ -231,7 +242,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}|", itor.Key ? "Width == Height" : "Width != Height");
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
@@ -272,7 +283,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}|", itor.Key);
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
@@ -313,7 +324,7 @@ namespace ResourceFormat
             foreach (var itor in list)
             {
                 sb.AppendFormat("|{0}|", itor.Key);
-                sb.AppendFormat("{0}|{1}|", itor.Key, EditorUtility.FormatBytes(itor.Value.Value));
+                sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
 
