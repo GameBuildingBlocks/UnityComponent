@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEditor;
+﻿using EditorCommon;
 using System.Collections.Generic;
-using EditorCommon;
+using UnityEditor;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -39,7 +39,8 @@ namespace ResourceFormat
             }
             TextureImporter tImport = AssetImporter.GetAtPath(assetPath) as TextureImporter;
             Texture texture = AssetDatabase.LoadAssetAtPath<Texture>(assetPath);
-            if (tImport == null || texture == null) return null;
+            if (tImport == null || texture == null)
+                return null;
 
             tInfo.Path = tImport.assetPath;
             tInfo.ImportType = tImport.textureType;

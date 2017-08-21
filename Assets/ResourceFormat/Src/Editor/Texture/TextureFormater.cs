@@ -1,8 +1,7 @@
-﻿using System.IO;
+﻿using EditorCommon;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
-using EditorCommon;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -21,9 +20,11 @@ namespace ResourceFormat
                     Debug.LogWarning("ApplyFormatTextureObject Stop.");
                     break;
                 }
-                if (texInfo == null) continue;
+                if (texInfo == null)
+                    continue;
                 TextureImporter tImporter = AssetImporter.GetAtPath(texInfo.Path) as TextureImporter;
-                if (tImporter == null) continue;
+                if (tImporter == null)
+                    continue;
                 if (tImporter.textureType != data.TexType)
                 {
                     tImporter.textureType = data.TexType;

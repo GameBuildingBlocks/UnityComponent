@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -9,7 +8,8 @@ namespace ResourceFormat
     {
         public static void ApplyFormatToObject(ModelImportData data)
         {
-            if (data == null) return;
+            if (data == null)
+                return;
 
             List<object> unFortmatObject = data.GetObjects(true);
 
@@ -22,9 +22,11 @@ namespace ResourceFormat
                     Debug.LogWarning("[ModelFormater]ApplyFormatObject Stop.");
                     break;
                 }
-                if (texInfo == null) continue;
+                if (texInfo == null)
+                    continue;
                 ModelImporter tImporter = AssetImporter.GetAtPath(texInfo.Path) as ModelImporter;
-                if (tImporter == null) continue;
+                if (tImporter == null)
+                    continue;
                 bool needImport = false;
                 if (tImporter.isReadable != data.ReadWriteEnable)
                 {

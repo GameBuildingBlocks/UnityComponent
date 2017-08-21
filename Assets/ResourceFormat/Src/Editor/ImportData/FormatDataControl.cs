@@ -1,8 +1,7 @@
-using UnityEngine;
-using UnityEditor;
+﻿using EditorCommon;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using EditorCommon;
+using UnityEditor;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -30,7 +29,8 @@ namespace ResourceFormat
         public virtual void OnDataSelected(object selected, int col)
         {
             ImportData importData = selected as ImportData;
-            if (importData == null) return;
+            if (importData == null)
+                return;
 
             m_editorData.CopyData(importData);
             m_index = importData.Index;
@@ -42,7 +42,8 @@ namespace ResourceFormat
         public virtual void OnInfoSelected(object selected, int col)
         {
             BaseInfo texInfo = selected as BaseInfo;
-            if (texInfo == null) return;
+            if (texInfo == null)
+                return;
             UnityEngine.Object obj = AssetDatabase.LoadAssetAtPath(texInfo.Path, typeof(UnityEngine.Object));
             EditorGUIUtility.PingObject(obj);
             Selection.activeObject = obj;
@@ -58,7 +59,8 @@ namespace ResourceFormat
         }
         public virtual void SaveData()
         {
-            if (m_index == -1) return;
+            if (m_index == -1)
+                return;
             T data = m_dataList[m_index];
             data.ClearObject();
             data.CopyData(m_editorData);
@@ -68,7 +70,8 @@ namespace ResourceFormat
         }
         public virtual void DeleteCurrentData()
         {
-            if (m_index == -1) return;
+            if (m_index == -1)
+                return;
             m_dataList.RemoveAt(m_index);
             m_index = -1;
             m_editorData = new T();
@@ -77,17 +80,20 @@ namespace ResourceFormat
         }
         public virtual void ModifDataPriority(bool up)
         {
-            if (m_index == -1) return;
+            if (m_index == -1)
+                return;
             var temp = m_dataList[m_index];
             if (up)
             {
-                if (m_index == 0) return;
+                if (m_index == 0)
+                    return;
                 m_dataList[m_index] = m_dataList[m_index - 1];
                 m_dataList[m_index - 1] = temp;
             }
             else
             {
-                if (m_index + 1 == m_dataList.Count) return;
+                if (m_index + 1 == m_dataList.Count)
+                    return;
                 m_dataList[m_index] = m_dataList[m_index + 1];
                 m_dataList[m_index + 1] = temp;
             }
@@ -122,7 +128,8 @@ namespace ResourceFormat
 
         public virtual void OnDataSelectedIndex()
         {
-            if (m_index == -1) return;
+            if (m_index == -1)
+                return;
             OnDataSelected(m_dataList[m_index], m_index);
         }
 

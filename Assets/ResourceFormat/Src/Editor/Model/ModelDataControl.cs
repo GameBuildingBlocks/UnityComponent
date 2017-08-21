@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using EditorCommon;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using EditorCommon;
+using UnityEditor;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -39,7 +38,8 @@ namespace ResourceFormat
                 string path = EditorPath.FormatAssetPath(list[i]);
                 string name = System.IO.Path.GetFileName(path);
                 EditorUtility.DisplayProgressBar("获取模型数据", name, (i * 1.0f) / list.Count);
-                if (!EditorPath.IsModel(path)) continue;
+                if (!EditorPath.IsModel(path))
+                    continue;
                 ModelInfo modelInfo = ModelInfo.CreateModelInfo(path);
                 if (modelInfo != null)
                 {
@@ -76,7 +76,8 @@ namespace ResourceFormat
         public override void OnDataSelected(object selected, int col)
         {
             ModelImportData texSelectData = selected as ModelImportData;
-            if (texSelectData == null) return;
+            if (texSelectData == null)
+                return;
 
             m_editorData.CopyData(texSelectData);
             m_index = texSelectData.Index;
@@ -89,7 +90,8 @@ namespace ResourceFormat
         private Object _FilterMesh(ModelImportData selected, Object obj)
         {
             Mesh mesh = obj as Mesh;
-            if (mesh == null) return obj;
+            if (mesh == null)
+                return obj;
 
             if (!selected.ImportNormal)
             {

@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using EditorCommon;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using EditorCommon;
+using UnityEditor;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -77,10 +76,12 @@ namespace ResourceFormat
         public override void OnDataSelected(object selected, int col)
         {
             AnimationImportData aniSelectData = selected as AnimationImportData;
-            if (aniSelectData == null) return;
+            if (aniSelectData == null)
+                return;
 
             m_editorData.CopyData(aniSelectData);
-            m_index = aniSelectData.Index; ;
+            m_index = aniSelectData.Index;
+            ;
             if (aniSelectData != null)
             {
                 m_showTable.RefreshData(aniSelectData.GetObjects(m_showUnformatObject));

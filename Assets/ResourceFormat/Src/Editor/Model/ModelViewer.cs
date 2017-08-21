@@ -1,7 +1,6 @@
-using UnityEngine;
+﻿using EditorCommon;
 using UnityEditor;
-using System.Collections.Generic;
-using EditorCommon;
+using UnityEngine;
 
 namespace ResourceFormat
 {

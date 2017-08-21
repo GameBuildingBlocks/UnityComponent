@@ -1,7 +1,7 @@
-using UnityEngine;
-using UnityEditor;
+﻿using EditorCommon;
 using System.Collections.Generic;
-using EditorCommon;
+using UnityEditor;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -22,7 +22,8 @@ namespace ResourceFormat
                 m_dictTexInfo.Add(assetPath, tInfo);
             }
             ModelImporter tImport = AssetImporter.GetAtPath(assetPath) as ModelImporter;
-            if (tImport == null) return null;
+            if (tImport == null)
+                return null;
 
             tInfo.Path = assetPath;
             tInfo.ReadWriteEnable = tImport.isReadable;

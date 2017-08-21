@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using EditorCommon;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using EditorCommon;
+using UnityEditor;
 
 namespace ResourceFormat
 {
@@ -31,7 +29,8 @@ namespace ResourceFormat
                 string path = EditorPath.FormatAssetPath(list[i]);
                 string name = System.IO.Path.GetFileName(path);
                 EditorUtility.DisplayProgressBar("获取贴图数据", name, (i * 1.0f) / list.Count);
-                if (!EditorPath.IsTexture(path)) continue;
+                if (!EditorPath.IsTexture(path))
+                    continue;
                 TextureInfo texInfo = TextureInfo.CreateTextureInfo(path);
                 if (texInfo != null)
                 {
@@ -67,10 +66,12 @@ namespace ResourceFormat
         public override void OnDataSelected(object selected, int col)
         {
             TextureImportData texSelectData = selected as TextureImportData;
-            if (texSelectData == null) return;
+            if (texSelectData == null)
+                return;
 
             m_editorData.CopyData(texSelectData);
-            m_index = texSelectData.Index; ;
+            m_index = texSelectData.Index;
+            ;
             if (texSelectData != null)
             {
                 m_showTable.RefreshData(texSelectData.GetObjects(m_showUnformatObject));

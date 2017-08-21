@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using EditorCommon;
+using System.Collections.Generic;
 using UnityEditor;
-using EditorCommon;
 
 namespace ResourceFormat
 {
@@ -24,7 +24,8 @@ namespace ResourceFormat
         public override void CopyData(ImportData data)
         {
             ModelImportData tData = data as ModelImportData;
-            if (tData == null) return;
+            if (tData == null)
+                return;
 
             base.CopyData(data);
             ReadWriteEnable = tData.ReadWriteEnable;
@@ -40,11 +41,16 @@ namespace ResourceFormat
         }
         public bool IsFormatModel(ModelInfo tInfo)
         {
-            if (tInfo.OptimizeMesh != OptimizeMesh) return false;
-            if (tInfo.ReadWriteEnable != ReadWriteEnable) return false;
-            if (tInfo.ImportAnimation != ImportAnimation) return false;
-            if (tInfo.ImportMaterials != ImportMaterials) return false;
-            if (tInfo.MeshCompression != MeshCompression) return false;
+            if (tInfo.OptimizeMesh != OptimizeMesh)
+                return false;
+            if (tInfo.ReadWriteEnable != ReadWriteEnable)
+                return false;
+            if (tInfo.ImportAnimation != ImportAnimation)
+                return false;
+            if (tInfo.ImportMaterials != ImportMaterials)
+                return false;
+            if (tInfo.MeshCompression != MeshCompression)
+                return false;
             return true;
         }
 
@@ -85,7 +91,8 @@ namespace ResourceFormat
             for (int i = 0; i < m_objects.Count; ++i)
             {
                 ModelInfo modelInfo = m_objects[i] as ModelInfo;
-                if (modelInfo == null) continue;
+                if (modelInfo == null)
+                    continue;
                 string name = System.IO.Path.GetFileName(modelInfo.Path);
                 EditorUtility.DisplayProgressBar("更新非法模型数据", name, (i * 1.0f) / m_objects.Count);
                 if (!IsFormatModel(modelInfo))

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using EditorCommon;
+using System.Collections.Generic;
 using UnityEditor;
-using EditorCommon;
 
 namespace ResourceFormat
 {
@@ -54,19 +54,23 @@ namespace ResourceFormat
             if (TexType == TextureImporterType.Cubemap)
             {
 #pragma warning restore 0618
-                if (texureImporter.textureShape != TextureImporterShape.TextureCube) return false;
-                else return true;
+                if (texureImporter.textureShape != TextureImporterShape.TextureCube)
+                    return false;
+                else
+                    return true;
             }
             else
             {
-                if (texureImporter.textureShape == TextureImporterShape.TextureCube) return false;
+                if (texureImporter.textureShape == TextureImporterShape.TextureCube)
+                    return false;
             }
             return texureImporter.textureType == TexType;
         }
         public override void CopyData(ImportData data)
         {
             TextureImportData tData = data as TextureImportData;
-            if (tData == null) return;
+            if (tData == null)
+                return;
 
             base.CopyData(data);
             AlphaMode = tData.AlphaMode;
@@ -111,7 +115,7 @@ namespace ResourceFormat
         }
         public TextureImporterFormat GetFormatByAlphaMode(TextureImporterFormat format, TextureImporter tImporter)
         {
-            if (AlphaMode == TextureAlphaMode.None || 
+            if (AlphaMode == TextureAlphaMode.None ||
                 tImporter.alphaSource == TextureImporterAlphaSource.None ||
                 !tImporter.DoesSourceTextureHaveAlpha())
             {
@@ -131,18 +135,28 @@ namespace ResourceFormat
         public bool IsFormatTexture(TextureInfo tInfo)
         {
             TextureImporter tImporter = AssetImporter.GetAtPath(tInfo.Path) as TextureImporter;
-            if (tImporter == null) return false;
-            if (tImporter.isReadable != ReadWriteEnable) return false;
-            if (tImporter.mipmapEnabled != MipmapEnable) return false;
-            if (tImporter.textureType != TexType) return false;
-            if (tImporter.textureShape != ShapeType) return false;
+            if (tImporter == null)
+                return false;
+            if (tImporter.isReadable != ReadWriteEnable)
+                return false;
+            if (tImporter.mipmapEnabled != MipmapEnable)
+                return false;
+            if (tImporter.textureType != TexType)
+                return false;
+            if (tImporter.textureShape != ShapeType)
+                return false;
             TextureImporterPlatformSettings settingAndroid = tImporter.GetPlatformTextureSettings(EditorConst.PlatformAndroid);
-            if (!settingAndroid.overridden || settingAndroid.format != GetFormatByAlphaMode(AndroidFormat, tImporter)) return false;
+            if (!settingAndroid.overridden || settingAndroid.format != GetFormatByAlphaMode(AndroidFormat, tImporter))
+                return false;
             TextureImporterPlatformSettings settingIos = tImporter.GetPlatformTextureSettings(EditorConst.PlatformIos);
-            if (!settingIos.overridden || settingIos.format != GetFormatByAlphaMode(IosFormat, tImporter)) return false;
-            if (MaxSize != -1 && tImporter.maxTextureSize != MaxSize) return false;
-            if (tImporter.maxTextureSize != settingAndroid.maxTextureSize) return false;
-            if (tImporter.maxTextureSize != settingIos.maxTextureSize) return false;
+            if (!settingIos.overridden || settingIos.format != GetFormatByAlphaMode(IosFormat, tImporter))
+                return false;
+            if (MaxSize != -1 && tImporter.maxTextureSize != MaxSize)
+                return false;
+            if (tImporter.maxTextureSize != settingAndroid.maxTextureSize)
+                return false;
+            if (tImporter.maxTextureSize != settingIos.maxTextureSize)
+                return false;
             return true;
         }
         private void _InitUnFormatList()
@@ -150,7 +164,8 @@ namespace ResourceFormat
             for (int i = 0; i < m_objects.Count; ++i)
             {
                 TextureInfo texInfo = m_objects[i] as TextureInfo;
-                if (texInfo == null) continue;
+                if (texInfo == null)
+                    continue;
                 string name = System.IO.Path.GetFileName(texInfo.Path);
                 EditorUtility.DisplayProgressBar("更新非法贴图数据", name, (i * 1.0f) / m_objects.Count);
                 if (!IsFormatTexture(texInfo))
