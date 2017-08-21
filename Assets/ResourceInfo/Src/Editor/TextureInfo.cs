@@ -28,6 +28,10 @@ namespace ResourceFormat
         public TextureWrapMode WrapMode;
         public FilterMode FilterMode;
         public TextureImporterShape ImportShape;
+        public int AndroidSize;
+        public int IosSize;
+        public int Width;
+        public int Height;
 
         public static TextureInfo CreateTextureInfo(string assetPath)
         {
@@ -53,9 +57,11 @@ namespace ResourceFormat
             tInfo.AndroidFormat = settingAndroid.format;
             TextureImporterPlatformSettings settingIos = tImport.GetPlatformTextureSettings(EditorConst.PlatformIos);
             tInfo.IosFormat = settingIos.format;
-            tInfo.MemSize = Mathf.Max(
-                EditorTool.CalculateTextureSizeBytes(texture, tInfo.AndroidFormat),
-                EditorTool.CalculateTextureSizeBytes(texture, tInfo.IosFormat));
+            tInfo.Width = texture.width;
+            tInfo.Height = texture.height;
+            tInfo.AndroidSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.AndroidFormat);
+            tInfo.IosSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.IosFormat);
+            tInfo.MemSize = Mathf.Max(tInfo.AndroidSize, tInfo.IosSize);
 
             if (Selection.activeObject != texture)
             {
