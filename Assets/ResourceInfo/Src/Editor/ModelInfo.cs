@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System.Text;
 
 namespace ResourceFormat
 {
@@ -21,6 +22,74 @@ namespace ResourceFormat
         public bool bHasTangent;
         public int vertexCount;
         public int triangleCount;
+
+        public int GetMeshDataID()
+        {
+            int meshDataIndex = _WorkData(0, bHasUV);
+            meshDataIndex = _WorkData(0, bHasUV2);
+            meshDataIndex = _WorkData(meshDataIndex, bHasUV3);
+            meshDataIndex = _WorkData(meshDataIndex, bHasUV4);
+            meshDataIndex = _WorkData(meshDataIndex, bHasColor);
+            meshDataIndex = _WorkData(meshDataIndex, bHasNormal);
+            meshDataIndex = _WorkData(meshDataIndex, bHasTangent);
+
+            return meshDataIndex;
+        }
+
+        public int GetVertexRangeID()
+        {
+            return vertexCount / OverviewTableConst.VertexCountMod;
+        }
+
+        public string GetVertexRangeStr()
+        {
+            int index = GetVertexRangeID();
+            return string.Format("{0}-{1}",
+                index * OverviewTableConst.VertexCountMod,
+                (index + 1) * OverviewTableConst.VertexCountMod - 1);
+        }
+
+        public int GetTriangleRangeID()
+        {
+            return triangleCount / OverviewTableConst.TriangleCountMod;
+        }
+
+        public string GetTriangleRangeStr()
+        {
+            int index = GetTriangleRangeID();
+            return string.Format("{0}-{1}",
+                index * OverviewTableConst.TriangleCountMod,
+                (index + 1) * OverviewTableConst.TriangleCountMod - 1);
+        }
+
+        public static string GetMeshDataStr(int key)
+        {
+            bool[] bData = new bool[7];
+            for (int i = 0; i < 7; ++i)
+            {
+                bData[i] = ((key >> i) & 1) > 0;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("vertices");
+            for (int i = 6; i >= 0; --i)
+            {
+                if (bData[i])
+                {
+                    sb.Append("," + OverviewTableConst.MeshDataStr[i]);
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private static int _WorkData(int data, bool flag)
+        {
+            if (flag)
+                return (data << 1) | 1;
+            else
+                return data << 1;
+        }
 
         public static ModelInfo CreateModelInfo(string assetPath)
         {

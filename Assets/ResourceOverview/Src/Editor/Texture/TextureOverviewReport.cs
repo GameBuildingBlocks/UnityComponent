@@ -140,15 +140,12 @@ namespace ResourceFormat
                 return y.Value.Value.CompareTo(x.Value.Value);
             });
 
-            string[] texTypeStr = { "Default", "NormalMap", "GUI", "Cubemap",
-                                      "Cookie", "Advanced", "Lightmap", "Cursor", "Sprite", "HDRI", "SingleChannel"};
-
             sb.AppendLine("####Texture Type");
             sb.AppendLine("|Type|Count|Size|");
             sb.AppendLine("|-|-|-|");
             foreach (var itor in list)
             {
-                sb.AppendFormat("|{0}|", texTypeStr[(int)itor.Key]);
+                sb.AppendFormat("|{0}|", OverviewTableConst.TextureTypeStr[(int)itor.Key]);
                 sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
@@ -158,23 +155,13 @@ namespace ResourceFormat
 
         private static string GenerateTextureSizeData(List<TextureInfo> texInfoList)
         {
-            int[] Size = { 64 * 64, 128 * 128, 256 * 256, 512 * 512, 1024 * 1024 };
-            string[] SizeStr = { "[0 - 64 X 64]", " (64 X 64 - 128 X 128]", "(128 X 128 - 256 * 256]", 
-                                   "(256 X 256 - 512 X 512]", "(512 X 512 - 1024 X 1024]", "(1024 X 1024 - ]" };
-
             Dictionary<int, KeyValuePair<int, long>> dict
                 = new Dictionary<int, KeyValuePair<int, long>>();
 
             for (int i = 0; i < texInfoList.Count; ++i)
             {
                 TextureInfo texInfo = texInfoList[i];
-                int index = 0, rSize = texInfo.Width * texInfo.Height;
-                while (index < Size.Length && rSize > Size[index])
-                {
-                    ++index;
-                }
-
-                var key = index;
+                var key = OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
                 var value = texInfoList[i].MemSize;
 
                 if (!dict.ContainsKey(key))
@@ -200,7 +187,7 @@ namespace ResourceFormat
             sb.AppendLine("|-|-|-|");
             foreach (var itor in list)
             {
-                sb.AppendFormat("|{0}|", SizeStr[(int)itor.Key]);
+                sb.AppendFormat("|{0}|", OverviewTableConst.TextureSizeStr[(int)itor.Key]);
                 sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }

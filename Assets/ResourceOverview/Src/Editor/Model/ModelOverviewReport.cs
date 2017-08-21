@@ -30,7 +30,7 @@ namespace ResourceFormat
             sw.WriteLine(GenerateMeshVerticesData(modelInfoList));
             sw.WriteLine(GenerateMeshCompressData(modelInfoList));
             sw.WriteLine(GenerateMeshVertexCountData(modelInfoList));
-            sw.WriteLine(GenerateMeshVertexCountData(modelInfoList));
+            sw.WriteLine(GenerateMeshTriangleCountData(modelInfoList));
 
             sw.Flush();
             sw.Close();
@@ -157,15 +157,7 @@ namespace ResourceFormat
             for (int i = 0; i < modelInfoList.Count; ++i)
             {
                 ModelInfo mInfo = modelInfoList[i];
-                int meshDataIndex = _WorkData(0, mInfo.bHasUV);
-                meshDataIndex = _WorkData(0, mInfo.bHasUV2);
-                meshDataIndex = _WorkData(meshDataIndex, mInfo.bHasUV3);
-                meshDataIndex = _WorkData(meshDataIndex, mInfo.bHasUV4);
-                meshDataIndex = _WorkData(meshDataIndex, mInfo.bHasColor);
-                meshDataIndex = _WorkData(meshDataIndex, mInfo.bHasNormal);
-                meshDataIndex = _WorkData(meshDataIndex, mInfo.bHasTangent);
-
-                var key = meshDataIndex;
+                var key = mInfo.GetMeshDataID();
                 var value = modelInfoList[i].MemSize;
 
                 if (!dict.ContainsKey(key))
@@ -189,25 +181,11 @@ namespace ResourceFormat
             sb.AppendLine("####Mesh Data");
             sb.AppendLine("|Data|Count|Size|");
             sb.AppendLine("|-|-|-|");
-            bool[] bData = new bool[7];
-            string[] strData = { "tangent", "normal", "color", "uv4", "uv3", "uv2", "uv" };
+
             foreach (var itor in list)
             {
                 int key = itor.Key;
-                for (int i = 0; i < 7; ++i) {
-                    bData[i] = ((key >> i) & 1) > 0;
-                }
-
-                sb.Append("|vertices");
-                for (int i = 6; i >= 0; --i)
-                {
-                    if (bData[i])
-                    {
-                        sb.Append("," + strData[i]);
-                    }
-                }
-                sb.Append("|");
-
+                sb.AppendFormat("|{0}|", ModelInfo.GetMeshDataStr(key));
                 sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
@@ -258,7 +236,7 @@ namespace ResourceFormat
 
         private static string GenerateMeshVertexCountData(List<ModelInfo> modelInfoList)
         {
-            int verTexMod = OverviewConfig.VertexCountMod;
+            int verTexMod = OverviewTableConst.VertexCountMod;
             Dictionary<int, KeyValuePair<int, long>> dict
                 = new Dictionary<int, KeyValuePair<int, long>>();
 
@@ -300,7 +278,7 @@ namespace ResourceFormat
 
         private static string GenerateMeshTriangleCountData(List<ModelInfo> modelInfoList)
         {
-            int triTexMod = OverviewConfig.TriangleCountMod;
+            int triTexMod = OverviewTableConst.TriangleCountMod;
             Dictionary<int, KeyValuePair<int, long>> dict
                 = new Dictionary<int, KeyValuePair<int, long>>();
 
@@ -338,14 +316,6 @@ namespace ResourceFormat
             }
 
             return sb.ToString();
-        }
-
-        private static int _WorkData(int data, bool flag)
-        {
-            if (flag)
-                return (data << 1) | 1;
-            else
-                return data << 1;
         }
     }
 }

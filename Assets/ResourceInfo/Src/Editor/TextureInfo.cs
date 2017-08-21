@@ -89,13 +89,15 @@ namespace ResourceFormat
             for (int i = 0; i < list.Count; ++i)
             {
                 string assetPath = EditorPath.FormatAssetPath(list[i]);
+                string name = System.IO.Path.GetFileName(assetPath);
+                EditorUtility.DisplayProgressBar("获取贴图数据", name, (i * 1.0f) / list.Count);
                 TextureInfo texInfo = CreateTextureInfo(assetPath);
                 if (texInfo != null)
                 {
                     texInfoList.Add(texInfo);
                 }
             }
-
+            EditorUtility.ClearProgressBar();
             return texInfoList;
         }
 
