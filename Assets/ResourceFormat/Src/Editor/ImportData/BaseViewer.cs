@@ -1,4 +1,5 @@
 using UnityEngine;
+using EditorCommon;
 
 namespace ResourceFormat
 {
@@ -8,7 +9,7 @@ namespace ResourceFormat
         public virtual void OnEnter() { }
         public virtual void Draw(Rect view) { }
 
-        protected EditorCommon.TableView m_dataTable;
-        protected EditorCommon.TableView m_showTable;
+        protected TableView m_dataTable;
+        protected TableView m_showTable;
     }
 }
