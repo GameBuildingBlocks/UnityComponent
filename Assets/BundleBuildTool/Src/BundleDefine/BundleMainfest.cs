@@ -81,7 +81,7 @@ namespace BundleManager
             {
                 while (iterator.MoveNext())
                 {
-                    string publishPath = BuildConfig.FormatPublishPath(iterator.Current.Key);
+                    string publishPath = iterator.Current.Key;
                     binaryWriter.Write(publishPath.Length);
                     binaryWriter.Write(publishPath.ToCharArray());
                     binaryWriter.Write(iterator.Current.Value.Length);
