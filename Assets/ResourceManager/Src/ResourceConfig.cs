@@ -10,8 +10,6 @@ namespace GameResource
         public static readonly int MAX_POOL_COUNT = 1024;
         public static readonly string BUNDLE_SUFFIX = "assetbundle";
         public static readonly string PATH_DIR_NAME = "res";
-        public static readonly string DICT_FILE_NAME = "BundleDict";
-        public static readonly string BUILD_STATE_FILE_NAME = "BuildState_Bundle";
 
         public static string FormatPath(int bundleId, bool export)
         {
