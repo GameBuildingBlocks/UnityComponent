@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
-
 namespace EditorCommon
 {
     public class TableViewColDesc
@@ -15,17 +14,17 @@ namespace EditorCommon
         public string Format;
         public float WidthInPercent;
 
-        public FieldInfo FieldInfo;
+        public MemberInfo MemInfo;
 
         public string FormatObject(object obj)
         {
-            return PAEditorUtil.FieldToString(obj, FieldInfo, Format);
+            return PAEditorUtil.MemberToString(obj, MemInfo, Format);
         }
 
         public int Compare(object o1, object o2)
         {
-            object fv1 = PAEditorUtil.FieldValue(o1, FieldInfo);
-            object fv2 = PAEditorUtil.FieldValue(o2, FieldInfo);
+            object fv1 = PAEditorUtil.MemberValue(o1, MemInfo);
+            object fv2 = PAEditorUtil.MemberValue(o2, MemInfo);
 
             IComparable fc1 = fv1 as IComparable;
             IComparable fc2 = fv2 as IComparable;
@@ -38,4 +37,3 @@ namespace EditorCommon
         }
     }
 }
-

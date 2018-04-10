@@ -11,7 +11,7 @@ namespace ResourceFormat
 
     public class ResourceOverviewWin : EditorWindow
     {
-        [MenuItem("Window/ResourceOverviewWin")]
+        [MenuItem("UComponents/ResourceOverviewWin")]
         static void Create()
         {
             ResourceOverviewWin resourceInfoWin = EditorWindow.GetWindow<ResourceOverviewWin>();

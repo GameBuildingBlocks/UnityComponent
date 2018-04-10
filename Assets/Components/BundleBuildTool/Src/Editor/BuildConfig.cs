@@ -10,7 +10,7 @@ namespace BundleManager
         public static BuildAssetBundleOptions DeterministicBundleOptions = BuildAssetBundleOptions.DeterministicAssetBundle;
         public static BuildOptions CompressSceneOptions = BuildOptions.CompressWithLz4;
         public static string BundleSuffix = ".assetBundle";
-        public static string InterpretedRootPath = "Assets/BundleBuildTool/Bundle/";
+        public static string InterpretedRootPath = "Assets/Components/BundleBuildTool/Bundle/";
         public static string ResourceRootPath = "Assets";
         public static string BundleDataPath = InterpretedRootPath + "BundleData.txt";
         public static string BundleStatePath = InterpretedRootPath + "BundleState.txt";

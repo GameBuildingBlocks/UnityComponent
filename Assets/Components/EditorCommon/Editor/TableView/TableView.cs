@@ -4,12 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Reflection;
+
 namespace EditorCommon
 {
     public delegate void SelectionHandler(object selected, int col);
 
     public partial class TableView : IDisposable
     {
+        // show internal sequential ID in the first column
+        public bool ShowInternalSeqID = false;
+
         public event SelectionHandler OnSelected;
 
         public TableViewAppr Appearance { get { return _appearance; } }
@@ -38,11 +42,15 @@ namespace EditorCommon
             desc.Alignment = alignment;
             desc.WidthInPercent = widthByPercent;
             desc.Format = string.IsNullOrEmpty(fmt) ? null : fmt;
-            desc.FieldInfo = m_itemType.GetField(desc.PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
-            if (desc.FieldInfo == null)
+            desc.MemInfo = m_itemType.GetField(desc.PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
+            if (desc.MemInfo == null)
             {
-                Debug.LogWarningFormat("Field '{0}' accessing failed.", desc.PropertyName);
-                return false;
+                desc.MemInfo = m_itemType.GetProperty(desc.PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
+                if (desc.MemInfo == null)
+                {
+                    Debug.LogWarningFormat("Field '{0}' accessing failed.", desc.PropertyName);
+                    return false;
+                }
             }
 
             m_descArray.Add(desc);
@@ -66,18 +74,18 @@ namespace EditorCommon
         public void Draw(Rect area)
         {
             GUILayout.BeginArea(area);
+            DrawTitle(area.width - 15);
+            GUIStyle s = new GUIStyle();
+            s.fixedHeight = _appearance.LineHeight * (m_lines.Count + 1);
+            s.stretchWidth = true;
+            GUILayout.BeginArea(new Rect(0, _appearance.LineHeight, area.width, area.height));
             _scrollPos = GUILayout.BeginScrollView(_scrollPos, GUIStyle.none, GUI.skin.verticalScrollbar);
             //Debug.LogFormat("scroll pos: {0:0.00}, {1:0.00}", _scrollPos.x, _scrollPos.y);
             {
-                GUIStyle s = new GUIStyle();
-                s.fixedHeight = _appearance.LineHeight * (m_lines.Count + 1);
-                s.stretchWidth = true;
                 Rect r = EditorGUILayout.BeginVertical(s);
                 {
                     // this silly line (empty label) is required by Unity to ensure the scroll bar appear as expected.
                     PAEditorUtil.DrawLabel("", _appearance.Style_Line);
-
-                    DrawTitle(r.width);
 
                     // these first/last calculatings are for smart clipping 
                     int firstLine = Mathf.Max((int)(_scrollPos.y / _appearance.LineHeight) - 1, 0);
@@ -86,12 +94,13 @@ namespace EditorCommon
 
                     for (int i = firstLine; i < lastLine; i++)
                     {
-                        DrawLine(i + 1, m_lines[i], r.width);
+                        DrawLine(i, m_lines[i], r.width);
                     }
                 }
                 EditorGUILayout.EndVertical();
             }
             GUILayout.EndScrollView();
+            GUILayout.EndArea();
             GUILayout.EndArea();
         }
 
@@ -106,9 +115,7 @@ namespace EditorCommon
             m_selected = obj;
 
             if (OnSelected != null)
-            {
                 OnSelected(obj, 0);
-            }
         }
 
         public object GetSelected()

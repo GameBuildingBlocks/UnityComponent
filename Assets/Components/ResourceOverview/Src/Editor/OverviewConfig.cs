@@ -6,8 +6,8 @@ namespace ResourceFormat
         public const string TextureReportPath = "TextureOverviewReport.md";
         public const string ModelReportPath = "ModelOverviewReport.md";
 
-        public const string TextureReportMenu = "ResourceOverview/TextureOverviewReport";
-        public const string ModelReportMenu = "ResourceOverview/ModelOverviewReport";
+        public const string TextureReportMenu = "UComponents/ResourcesOverview/TextureOverviewReport";
+        public const string ModelReportMenu = "UComponents/ResourcesOverview/ModelOverviewReport";
 
     }
 

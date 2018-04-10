@@ -7,7 +7,7 @@ namespace ResourceFormat
     {
         private ViewerMgr m_modeMgr;
 
-        [MenuItem("Window/ResourceFormatWin")]
+        [MenuItem("UComponents/ResourceFormatWin")]
         static void Create()
         {
             ResourceFormatWin resourceInfoWin = EditorWindow.GetWindow<ResourceFormatWin>();

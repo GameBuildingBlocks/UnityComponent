@@ -8,7 +8,7 @@ namespace BundleManager
 {
     public class BundleBuildWin : EditorWindow
     {
-        [MenuItem("Window/BundleBuildWin")]
+        [MenuItem("UComponents/BundleBuildWin")]
         public static void Create()
         {
             BundleBuildWin bundleManagerWin = EditorWindow.GetWindow<BundleBuildWin>();
